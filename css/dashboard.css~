@@ -1,0 +1,189 @@
+.personal-info ul li {
+  list-style: none outside none;
+  margin: 0;
+  padding: 5px;
+}
+.personal-info ul {
+  margin: 0;
+  padding: 0;
+}
+.personal-info ul li lable {
+  font-weight: 600;
+}
+
+h3.bar {
+  background: none repeat scroll 0 0 #CCCCCC;
+  padding: 5px;
+}
+
+.msg-content {
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px;
+}
+
+.wob {
+
+  margin: 2px;
+  padding: 10px;
+  float: left;
+}
+
+.widget.timeline {
+  height: 100%;
+}
+
+.widget, .widget-cover .cover-content {
+  -moz-box-sizing: border-box;
+  background-clip: padding-box;
+  background-color: #FFFFFF;
+  border: 1px solid #B3BBBB;
+  border-radius: 6px 6px 6px 6px;
+  box-shadow: 0 1px 3px rgba(32, 41, 55, 0.11);
+  margin: -1px;
+}
+
+.widget.timeline.textstream .widget-header,  .widget-header {
+  background-clip: padding-box;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #CDD5DA;
+  border-radius: 6px 6px 0 0;
+  height: 52px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  white-space: nowrap;
+  z-index: 1;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 50px;
+}
+
+.widget.timeline.textstream .timeline-items-wrapper {
+  padding-top: 50px;
+  top: -51px;
+}
+
+.widget.timeline .timeline-items-wrapper {
+  -moz-box-sizing: border-box;
+  height: 100%;
+  position: relative;
+}
+
+.widget.timeline.textstream .timeline-items-wrapper .timeline-items-bevel:after {
+  background-clip: padding-box;
+  background-image: -moz-linear-gradient(center bottom , #FFFFFF 35%, rgba(255, 255, 255, 0) 100%);
+  border-radius: 0 0 6px 6px;
+  bottom: 0;
+  content: "";
+  display: block;
+  height: 40px;
+  margin-bottom: 1px;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  width: 100%;
+}
+
+.scalable-canvas .widget.timeline .timeline-items-wrapper .timeline-items-bevel .timeline-items {
+  overflow: auto;
+}
+
+.widget.timeline.textstream .timeline-items-wrapper .timeline-items-bevel {
+  padding-bottom: 1px;
+}
+
+.widget.timeline .timeline-items-wrapper .timeline-items-bevel {
+  -moz-box-sizing: border-box;
+  height: 100%;
+  position: relative;
+}
+
+.widget.timeline.textstream .timeline-items-wrapper .timeline-items-bevel .timeline-items {
+  background-clip: padding-box;
+  border-radius: 0 0 6px 6px;
+}
+
+.widget.timeline .timeline-items-wrapper .timeline-items-bevel .timeline-items {
+  height: 100%;
+  list-style: none outside none;
+  margin: 0;
+  overflow: scroll;
+  padding: 0;
+}
+.widget.timeline.textstream .timeline-items-wrapper .timeline-items-bevel .timeline-items .timeline-item:nth-child(2n+1) {
+  background-color: #FAFBFC;
+}
+.widget.timeline.textstream .timeline-items-wrapper .timeline-items-bevel .timeline-items .timeline-item {
+  -moz-box-sizing: border-box;
+  border-bottom: 1px solid #D5DAE1;
+  box-shadow: 0 1px 0 #FFFFFF inset;
+  color: #3A3A3A;
+  min-height: 40px;
+  padding: 20px;
+  text-shadow: 0 1px 0 #FFFFFF;
+}
+.widget.timeline .timeline-items-wrapper .timeline-items-bevel .timeline-items .timeline-item {
+  list-style: none outside none;
+  overflow: hidden;
+  position: relative;
+  text-align: left;
+}
+
+.widget.timeline.textstream .timeline-items-wrapper .timeline-items-bevel .timeline-items .timeline-item {
+  color: #333333;
+  font-weight: 600;
+  text-shadow: 0 1px 0 #FFFFFF;
+}
+
+.widget.timeline .timeline-items-wrapper .timeline-items-bevel .timeline-items .timeline-item {
+  list-style: none outside none;
+  text-align: left;
+}
+.widget.timeline.textstream .timeline-items-wrapper .timeline-items-bevel .timeline-items .timeline-item .comments, .widget.timeline.textstream .timeline-items-wrapper .timeline-items-bevel .timeline-items .timeline-item .news-source {
+  font-size: 12px;
+  margin-top: 7px;
+  opacity: 0.5;
+}
+
+#clock {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background: url(../images/clockface.png) no-repeat;
+  list-style: none;
+  left: 40px;
+}
+
+#sec, #min, #hour {
+  position: absolute;
+  width: 10px;
+  height: 200px;
+  top: 0px;
+  left: 95px;
+}
+
+#sec {
+  background: url(../images/sechand.png);
+  z-index: 3;
+}
+   
+#min {
+  background: url(../images/minhand.png);
+  z-index: 2;
+}
+   
+#hour {
+background: url(../images/hourhand.png);
+  z-index: 1;
+}
+
+.highcharts-container {
+   border: 1px solid #B3BBBB;
+   border-radius: 6px;
+}
+
+.user-pics {
+  margin-top: 15px;
+  text-align: center;
+}

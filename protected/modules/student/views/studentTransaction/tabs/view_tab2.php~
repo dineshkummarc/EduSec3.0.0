@@ -1,0 +1,65 @@
+<div class="row" >
+	<div class="row-column2">
+		<?php echo CHtml::label('Student No. :','student_no'); ?>   
+		<?php echo $info->student_no;?>
+	</div>
+	<!--div class="row-column1">
+        <?php echo CHtml::label('Name :','student_guardian_name'); ?>
+        <?php echo $info->student_guardian_name; ?>	
+	</div-->
+	
+	<div class="row-column2">
+        <?php echo CHtml::label('Relation :','student_guardian_relation'); ?>
+	<?php echo $info->student_guardian_relation; ?>	
+	</div>
+</div>
+
+<div class="row">
+	<div class="row-column1">
+        <?php echo CHtml::label('Qualification :','student_guardian_qualification'); ?>
+        <?php echo $info->student_guardian_qualification; ?>	
+	</div>
+
+	<div class="row-column2">
+        <?php echo CHtml::label('Occupation :','student_guardian_occupation'); ?>
+        <?php echo $info->student_guardian_occupation; ?>	
+	</div>  
+
+</div>
+
+<div class="row">
+	<div class="row-column1">        
+        <?php echo CHtml::label('Annual Income :','student_guardian_income'); ?>
+        <?php echo $info->student_guardian_income; ?>
+	</div> 
+
+	<?php if (isset(Yii::app()->modules['parents'])) { ?>
+	<div class="row-column2">
+		<?php echo CHtml::label('Parent Email :','parent_user_name'); ?>
+		<?php if($model->student_transaction_parent_id != 0 ) 
+			echo $model->Rel_parent->parent_user_name; ?>
+	</div>
+	<?php } ?>
+</div>
+
+<div class="row">
+        <?php echo CHtml::label('Home Add. :','student_guardian_home_address'); ?>
+        <?php echo $info->student_guardian_home_address; ?>
+</div>
+
+<div class="row">
+        <?php echo CHtml::label('Occupation Add. :','student_guardian_occupation_address'); ?>
+        <?php echo $info->student_guardian_occupation_address; ?>
+</div>
+
+<div class="row">
+	<div class="row-column1">
+        <?php echo CHtml::label('Phone :','student_guardian_phoneno'); ?>
+        <?php echo $info->student_guardian_phoneno; ?>
+	</div>
+
+	<div class="row-column2">
+	<?php echo CHtml::label('Mobile :','student_guardian_mobile'); ?>
+        <?php echo $info->student_guardian_mobile; ?>
+	</div>
+</div>
