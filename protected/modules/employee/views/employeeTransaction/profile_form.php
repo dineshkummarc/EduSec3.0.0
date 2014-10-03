@@ -35,7 +35,7 @@ var editLinkPath = '<?php echo Yii::app()->baseUrl; ?>';
 		<?php  if(Yii::app()->user->checkAccess('EmployeeTransaction.UpdateEmployeeData')  && (Yii::app()->user->getState('emp_id') == $_REQUEST['id']) || Yii::app()->user->checkAccess('EmployeeTransaction.UpdateAllEmployeeData') && $model->employee_status==0)  { ?>
 			<a title="Change Picture" href ="<?php echo Yii::app()->baseUrl.'/employee/employeeTransaction/updateprofilephoto?id='.$_REQUEST['id']; ?>">
 		<?php   }?>
-                            <div class="profile-box-user"><img src="<?php echo $emp_photo;?>" width="200" height="200"></a></div>
+                            <div class="profile-box-user"><img src="<?php echo $emp_photo;?>" width="200" height="200"></div></a>
                         </div>
                     </div>
                     <div class="profilebox-middle" style="font-family : sans-serif; ">
