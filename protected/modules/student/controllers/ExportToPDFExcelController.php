@@ -463,8 +463,8 @@ class ExportToPDFExcelController extends RController
 		    //'studentfeedbackdetailstable'=>$studentfeedbackdetailstable,
 		), true);
 
-
-		$this->exporttopdf('Stundent Report','StundentFinalView.pdf',$html);	       
+		$mpdf = new ExportToPdf();
+		$mpdf->exportData('Stundent Report','StundentFinalView.pdf',$html);	       
 	    }
 	//feedbackcategorymaster//////////////////////////
 	public function actionFeedbackcategoryExportToPdf() 

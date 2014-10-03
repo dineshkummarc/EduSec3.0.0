@@ -53,7 +53,7 @@ $pageSize = Yii::app()->params['pageSize'];
 $dataProvider->getPagination()->setPageSize($pageSize);
 ?>
 
-<?php $visible=Yii::app()->user->checkAccess("Student.StudentTransaction.Update")? true : false; ?>
+<?php $visible=Yii::app()->user->checkAccess("Student.StudentTransaction.Create")? true : false; ?>
 <?php $this->widget('zii.widgets.grid.CGridView', array(
 	'id'=>'student-transaction-grid',
 	'dataProvider'=>$dataProvider,

@@ -52,8 +52,13 @@
             <!--==============Page Content Start [here]=====================-->
             <div class="header">
             	<div class="header-left">
-		<?php echo CHtml::link(CHtml::image(Yii::app()->controller->createUrl('/site/loadImage'),'No Image',array('width'=>80,'height'=>70)),array('/dashboard/dashboard'));
+		<?php echo CHtml::link(CHtml::image(Yii::app()->controller->createUrl('/site/loadImage'),'No Image',array('width'=>80,'height'=>70)),array('/dashboard/dashboard'), array('style'=>'float: left;'));
 		?>
+		<div class='org-name' style="float: left; margin: 20px; font-size: 30px;">
+		   <?php $orgName = Organization::model()->findAll(); 
+			print CHtml::link($orgName[0]->organization_name, array('/dashboard/dashboard'));
+		   ?>
+		</div>
 		</div>
                 <div class="header-right">
                 	<div class="nav">
@@ -75,7 +80,7 @@
 			<li><a href="<?php echo Yii::app()->baseUrl;?>/mailbox" class="nav-link green"><i class="fa fa-envelope"></i> <span class="nav-counter nav-counter-blue"><?php echo $count;?></span></a></li>
 		   <?php
 		    }?>
-                        <li><a href="#" class="nav-link orange"><i class="fa fa-tasks"></i> <span class="nav-counter">15</span></a></li>
+                        <li><a href="#" class="nav-link orange"><i class="fa fa-tasks"></i> <span class="nav-counter nav-counter-green">15</span></a></li>
 			<?php		
 			$isStudent = Yii::app()->user->getState('stud_id');
 			$isEmployee = Yii::app()->user->getState('emp_id');
@@ -437,7 +442,7 @@
                         	<div class="box-header blue">
                         		<span class="title"><i class="fa fa-users"></i> Personal time table</span>
                         	</div>
-                        	<div class="box-content" style="background: #e4f8f7;">
+                        	<div class="box-content">
                             	<div class="box-content-inner">
                                 	<div class="timetable-left">
                                     	<div class="timetable-left-section">
@@ -522,7 +527,7 @@
 
 <?php echo $this->renderPartial('/layouts/menuItems'); ?>
          <script>
-		var someValue = 110;
+		//var someValue = 110;
 		function equalHeight(group) {
 		   tallest = 0;
 		   
@@ -532,7 +537,7 @@
 				 tallest = thisHeight;
 			  }
 		   });
-		   group.height(parseInt(tallest) - someValue);
+		   group.height(tallest);
 		}
 		$(document).ready(function() {
 		   equalHeight($(".column"));

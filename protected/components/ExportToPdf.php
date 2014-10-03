@@ -6,6 +6,7 @@ class ExportToPdf
 
 		$mpdf=Yii::app()->ePdf->mpdf('utf-8', 'A4',0,'',15,15,25,16,4,9,'P');		
 		$org = Organization::model()->findAll();
+		$src = Yii::app()->baseUrl."/site/loadImage/id/".$org[0]['organization_id'];
 		$org_image=CHtml::link(CHtml::image(Yii::app()->controller->createUrl('/site/loadImage', array('id'=>$org[0]['organization_id'])),'No Image',array('width'=>90,'height'=>70))); 
 		$org_name=$org[0]['organization_name'];
 		$org_add=$org[0]['address_line1']."<br/>".$org[0]['address_line2'];
@@ -14,7 +15,7 @@ class ExportToPdf
 		$mpdf->SetHTMLHeader('<table style="border-bottom:1.6px solid #74b9fo;border-top:hidden;border-left:hidden;border-right:hidden;width:100%;"><tr style="border:hidden"><td vertical-align="center" style="width:35px;border:hidden" align="left">'.$org_image.'</td><td style="border:hidden;text-align:left;color:#555555;"><b style="font-size:22px;">'.$org_name.'</b><br/><span style="font-size:10.2px">'.$org_add.'</td></tr></table>');
 		$stylesheet = file_get_contents('css/pdf.css'); // external css
 		$mpdf->WriteHTML($stylesheet,0);
-		$mpdf->WriteHTML('<watermarkimage src="/edusec-school/edusec_new_development/site/loadImage/id/'.$org[0]['organization_id'].'" alpha="0.33" size="50,30"/>');
+		$mpdf->WriteHTML('<watermarkimage src='.$src.' alpha="0.33" size="50,30"/>');
 		//$mpdf->SetWatermarkImage('images/rudraSoftech.png',0.5, '');
 		$mpdf->showWatermarkImage = true;
 		$arr = array (

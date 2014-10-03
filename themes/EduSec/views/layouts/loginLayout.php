@@ -46,7 +46,7 @@
         <div class="login">Forgot Password</div>
 	<?php } ?>
         <div id="container">
-            <div class="logobox"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/logo.png" width="225" height="51" alt="RudraSoftech" title="RudraSoftech" /></div>
+            <div class="logobox"><img src="<?php echo Yii::app()->theme->baseUrl; ?>/images/product.png" width="165" height="30" alt="RudraSoftech" title="RudraSoftech" style="margin-top: 15px;" /></div>
 	<?php print $content; ?>
         </div>
     </div>

@@ -625,7 +625,7 @@ span.box-title {
   border-radius: 2px 0 0 2px;
   color: #FFFFFF;
   float: left;
-  padding: 5px 10px;
+  padding: 2px 10px;
 }
 
 .btnblue {
@@ -842,6 +842,7 @@ table.detail-view .col2 {
 }
 .grid-view .pager, .grid-view .custom-pager-class, .grid-view .yiiPager {
   float: right;
+  list-style-type: none;
 }
 .grid-view .yiiPager {
   margin-top : 16px;
@@ -877,15 +878,17 @@ ul.yiiPager {
 .custom-pager-class select,
 ul.yiiPager select {
   -moz-appearance: none;
+  -webkit-appearance: none;
   background: url("../images/arrow.png") no-repeat scroll 50px 8px #FFFFFF;
   border: 1px solid #CCCCCC;
   color: #000000;
   padding: 5px;
   text-indent: 0.01px;
   text-overflow: "";
-  width: 100px;
+  width: 70px;
 }
 .footer-area {
+    margin-left: 1px;
     float: left;
     width: 100%;
     background: #FFF;

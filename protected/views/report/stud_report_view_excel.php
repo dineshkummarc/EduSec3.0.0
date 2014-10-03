@@ -26,9 +26,24 @@ if($stud_data)
     </div>
 	<div class="portlet-body" >
 <?php	echo '<table class="report-table" border="2" > ';
+	if(empty($org_data->city))
+	$city = '';
+	else
+	$city = City::model()->findBypk($org_data->city)->city_name;
+
+	if(empty($org_data->state))
+	$state = '';
+	else
+	$state = State::model()->findBypk($org_data->state)->state_name;
+
+	if(empty($org_data->country))
+	$country = '';
+	else
+	$country = Country::model()->findBypk($org_data->country)->name;
+
 	echo "<thead>";
 	echo "<tr align=center> <th  colspan = 15 style=text-align:left;> ".CHtml::image(Yii::app()->controller->createUrl('/site/loadImage', array('id'=>$org_data->organization_id)),'No Image',array('width'=>80,'height'=>55,'style'=>'float:left;margin-left:200px;')) ."
-	 <big> <b>".$org_data->organization_name ."</big><br>". $org_data->address_line1." ".$org_data->address_line2."</br>"  . City::model()->findBypk($org_data->city)->city_name.", ".State::model()->findBypk($org_data->state)->state_name.", ".Country::model()->findBypk($org_data->country)->name."." ." </th> <br>	 </tr>";
+	 <big> <b>".$org_data->organization_name ."</big><br>". $org_data->address_line1." ".$org_data->address_line2."</br>"  . $city.", ".$state.", ".$country."." ." </th> <br>	 </tr>";
 
 	$student_info=new StudentInfo;
 	$sem=new AcademicTerm;

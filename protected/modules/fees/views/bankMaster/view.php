@@ -6,14 +6,16 @@ $this->breadcrumbs=array(
 
 ?>
 
-<div class="portlet box blue">
+<div class="portlet box blue view">
  <div class="portlet-title"><i class="fa fa-list-alt"></i><span class="box-title">View Details</span>
 </div>
 <div class="operation">
 <?php echo CHtml::link('<i class="fa fa-chevron-left"></i>Back', array('admin'), array('class'=>'btnyellow'));?>
 <?php echo CHtml::link('<i class="fa fa-pencil-square-o"></i>Edit', array('update' ,'id'=>$model->bank_id, 'page'=>Yii::app()->request->getParam('page')), array('class'=>'btn green'));?>
 <?php echo CHtml::link('<i class="fa fa-minus-circle"></i>Delete', array('delete' ,'id'=>$model->bank_id), array('class'=>'btnblue','onclick'=>"return confirm('Are you sure want to delete?');"));?>
-</div> 
+</div>
+<div class="detail-content">
+ <div class="detail-bg"> 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
@@ -22,4 +24,7 @@ $this->breadcrumbs=array(
 		
 	),
 	//'htmlOptions'=> array('class'=>'custom-view'),
-)); ?></div>
+)); ?>
+</div>
+</div>
+</div>

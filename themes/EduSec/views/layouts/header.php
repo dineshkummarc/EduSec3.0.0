@@ -1,8 +1,13 @@
             <!--==============Page Content Start [here]=====================-->
             <div class="header">
             	<div class="header-left">
-		<?php echo CHtml::link(CHtml::image(Yii::app()->controller->createUrl('/site/loadImage'),'No Image',array('width'=>80,'height'=>70)),array('/dashboard/dashboard'));
+		<?php echo CHtml::link(CHtml::image(Yii::app()->controller->createUrl('/site/loadImage'),'No Image',array('width'=>80,'height'=>70)),array('/dashboard/dashboard') , array('style'=>'float: left;'));
 		?>
+		<div class='org-name' style="float: left; margin: 20px; font-size: 30px;">
+		   <?php $orgName = Organization::model()->findAll(); 
+			print CHtml::link($orgName[0]->organization_name, array('/dashboard/dashboard'));
+		   ?>
+		</div>
 		</div>
                 <div class="header-right">
                 	<div class="nav">
@@ -24,7 +29,7 @@
 			<li><a href="<?php echo Yii::app()->baseUrl;?>/mailbox" class="nav-link green"><i class="fa fa-envelope"></i> <span class="nav-counter nav-counter-blue"><?php echo $count;?></span></a></li>
 		   <?php			
 		    }?>
-                        <li><a href="#" class="nav-link orange"><i class="fa fa-tasks"></i> <span class="nav-counter">15</span></a></li>
+                        <li><a href="#" class="nav-link orange"><i class="fa fa-tasks"></i> <span class="nav-counter nav-counter-green">15</span></a></li>
 			<?php		
 			$isStudent = Yii::app()->user->getState('stud_id');
 			$isEmployee = Yii::app()->user->getState('emp_id');

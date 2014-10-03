@@ -92,7 +92,7 @@ class ReportController extends EduSecCustom
 					->from('student_transaction stud')
 					->join('student_info stud_info', 'stud_info.student_id = stud.student_transaction_student_id')
 					->leftJoin('student_address add', 'add.student_address_id = stud.student_transaction_student_address_id')
-					->where($query.' student_transaction_detain_student_flag in(11)')
+					->where($query.' student_transaction_detain_student_flag in(1)')
 					->queryAll();
 		Yii::import('application.extensions.tcpdf.*');
 		require_once('tcpdf/tcpdf.php');
@@ -117,7 +117,7 @@ class ReportController extends EduSecCustom
 					->join('student_info stud_info', 'stud_info.student_id = stud.student_transaction_student_id')
 					->leftJoin('student_address add', 'add.student_address_id = stud.student_transaction_student_address_id')
 
-					->where($query.' student_transaction_detain_student_flag in(11) order by student_roll_no')
+					->where($query.' student_transaction_detain_student_flag in(1) order by student_roll_no')
 					->queryAll();
 		  
 		  Yii::app()->request->sendFile(date('YmdHis').'.xls',
@@ -556,7 +556,7 @@ class ReportController extends EduSecCustom
 					->queryAll();
 			*/ 
 			//print_r($stud_trans); exit;
-			$this->redirect(array('studentdocumentsearchview1','stud_trans'=>$stud_trans));
+			$this->redirect(array('studentdocumentsearchview1','stud_trans'=>'All'));
 		}
 		}
 		$this->render('student_document_search',array('model'=>$model));

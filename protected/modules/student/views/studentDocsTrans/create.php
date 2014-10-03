@@ -1,6 +1,6 @@
 <?php
 $this->breadcrumbs=array(
-	'Student Document'=>array('/studentTransaction/update','id'=>$_REQUEST['id']),
+	'Student Document'=>array('studentTransaction/update','id'=>$_REQUEST['id']),
 	'Add',
 );
 

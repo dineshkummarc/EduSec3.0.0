@@ -12,6 +12,7 @@
 	'id'=>'employee-docs-trans-form',
 	'enableAjaxValidation'=>true,
 	'htmlOptions'=>array('enctype'=>'multipart/form-data'),
+	'clientOptions'=>array('validateOnSubmit'=>true,'validateOnCnange'=>true),
 )); ?>
 
 	<p class="note">Fields with <span class="required">*</span> are required.</p>
@@ -63,6 +64,7 @@
 	<div class="row">
 	      <?php echo $form->labelEx($emp_doc,'employee_docs_path'); ?>
 	      <?php echo $form->fileField($emp_doc, 'employee_docs_path'); ?>
+		<span class="status">&nbsp;</span>
 	      <?php echo $form->error($emp_doc,'employee_docs_path'); ?><?php CHtml::endForm(); ?>	
 	</div>
 	<div class="hint"><b>Hint:-</b>&nbsp;Upload Only Jpeg, Jpg, Pdf, Txt, Doc, Gif, Png Type Document</div>

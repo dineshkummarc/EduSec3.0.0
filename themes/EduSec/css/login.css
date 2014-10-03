@@ -35,8 +35,16 @@ html {
 	border-top:2px solid #f57d20;
 	
 }
-.logobox{background:#fff;width:98%;padding:1%}
+.logobox {
+  background: none repeat scroll 0 0 #FFFFFF;
+  float: left;
+  height: 55px;
+  padding: 1%;
+  text-align: center;
+  width: 98%;
+}
 .forgotbox{padding:10px 0 10px 0}
+.forgotbox a {color:#FFF;}
 #container {
 	width: 340px;
 	margin:0 auto;
@@ -131,7 +139,7 @@ input[type=password]:focus {
 	border-bottom-left-radius: 3px;
 }
 .logo{margin:80px auto 50px auto; text-align:center}
-.login{margin:20px auto 20px auto; text-align:center; font-size:24px; color:#333}
+.login{margin:20px auto 20px auto; text-align:center; font-size:24px; color:#FFF}
 .userphoto{margin:20px auto 20px auto; text-align:center}
 .signin{margin:50px auto 50px auto; text-align:center; font-size:14px; color:#333}
 .signin span{font-weight:bold;}
@@ -184,14 +192,14 @@ input[type=submit]:active {
 	}
 .footer-date-display {
 	padding: 0; 
-	color: #333; 
+	color: #FFF; 
 	text-align:right;
 	font-size:36px;
 	padding:0 2% 0 0;
 	}
 	.footer-day-display {
 	padding: 0; 
-	color: #333; 
+	color: #FFF; 
 	text-align:right;
 	font-size:24px;
 	padding:0 2% 0 0;

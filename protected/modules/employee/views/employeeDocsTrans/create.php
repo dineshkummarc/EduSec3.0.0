@@ -1,6 +1,6 @@
 <?php
 $this->breadcrumbs=array(
-	//'Employee Docs Trans'=>array('index'),
+	'Employee Document'=>array('employeeTransaction/update','id'=>$_REQUEST['id']),
 	'Add',
 );
 
