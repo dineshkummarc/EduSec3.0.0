@@ -1,4 +1,4 @@
-### EduSec 2.x.y - EduSec2.1.2-c21de642.1.2 ###
+### EduSec 2.x.y => EduSec2.1.2-c21de642.1.2 ###
 Point release 2.0.0: 17/10/2013
 Point release 2.1.2: dd/mm/20yy
 
