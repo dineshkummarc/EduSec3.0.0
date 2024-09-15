@@ -10,7 +10,6 @@ Point release 2.1.1: 15/04/2014
 # EduSec 3.0.0 #
 Point release 3.0.0: 04/10/2014
 
-
 # Introduction #
 Welcome to  EduSec!
 
@@ -48,5 +47,4 @@ After completed installation process, if you want to test application with demo 
 NOTE : Demo database user details ->
  	Username : admin@rudrasoftech.com
 	Password : admin
-
- 
+-----------------------------------------------------------------------------------------------------------------------------
