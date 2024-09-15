@@ -1,19 +1,14 @@
 <?php
+/*****************************************************************************************
+ * EduSec is a college management program developed by
+ * Rudra Softech, Inc. Copyright (C) 2013-2014.
+ ****************************************************************************************/
 
 /**
  * This is the model class for table "course_unit_table".
- *
- * The followings are the available columns in table 'course_unit_table':
- * @property integer $course_unit_id
- * @property integer $course_unit_master_id
- * @property string $course_unit_ref_code
- * @property string $course_unit_name
- * @property integer $course_unit_level
- * @property integer $course_unit_credit
- * @property integer $course_unit_hours
- * @property integer $course_unit_created_by
- * @property string $course_unit_creation_date
+ * @package EduSec.models
  */
+
 class CourseUnitTable extends CActiveRecord
 {
 	/**
@@ -39,15 +34,11 @@ class CourseUnitTable extends CActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('course_unit_master_id, course_unit_name, course_unit_hours, course_unit_created_by, course_unit_creation_date', 'required', 'message'=>''),
 			array('course_unit_master_id, course_unit_level, course_unit_credit, course_unit_hours, course_unit_created_by', 'numerical', 'integerOnly'=>true),
 			array('course_unit_ref_code', 'length', 'max'=>100),
 			array('course_unit_name', 'length', 'max'=>200),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
 			array('course_unit_id, course_unit_master_id, course_unit_ref_code, course_unit_name, course_unit_level, course_unit_credit, course_unit_hours, course_unit_created_by, course_unit_creation_date', 'safe', 'on'=>'search'),
 		);
 	}
@@ -108,6 +99,9 @@ class CourseUnitTable extends CActiveRecord
 		));
 	}
 
+	/**
+	 * @return CActiveDataProvider data based on course.
+	 */
 	public function coursewisesearch()
 	{
 		// Warning: Please modify the following code to remove attributes that

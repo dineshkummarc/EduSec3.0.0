@@ -43,7 +43,7 @@ class StudentDocs extends CActiveRecord
 
 			array('student_docs_path', 'file', 'types'=>'jpeg, jpg, pdf, txt, doc,docx, gif, png', 'maxSize'=>1024*1024*2, 'tooLarge'=>'The document was larger than 2MB. Please upload a smaller document.',),
 			
-			array('title','CRegularExpressionValidator','pattern'=>'/^[a-zA-Z& ]+([-]*[a-zA-Z0-9 ]+)*$/','message'=>''),			
+			//array('title','CRegularExpressionValidator','pattern'=>'/^[a-zA-Z& ]+([-]*[a-zA-Z0-9 ]+)*$/','message'=>''),			
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('student_docs_id, student_docs_desc, student_docs_path, doc_category_id,student_docs_submit_date, title', 'safe', 'on'=>'search'),

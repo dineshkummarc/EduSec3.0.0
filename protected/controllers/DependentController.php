@@ -223,6 +223,33 @@ class DependentController extends RController
             }
 	
          }
+
+	public function actionGetStudCertiSem()
+        {
+	    $org_id = Yii::app()->user->getState('org_id');
+	    $data = AcademicTerm::model()->findAll('academic_term_period_id=:academic_term_period_id and academic_term_organization_id = :org_id', array(':academic_term_period_id'=>(int) $_REQUEST['Certificate']['academic_term_period'], ':org_id'=>$org_id));
+             
+            $data=CHtml::listData($data,'academic_term_id','academic_term_name');
+            foreach($data as $value=>$name)
+            {
+                echo CHtml::tag('option',
+                        array('value'=>$value),CHtml::encode('Sem-'.$name),true);
+            }
+         }
+
+	public function actionSemEndSemester()
+        {
+	    $org_id = Yii::app()->user->getState('org_id');
+	    $data = AcademicTerm::model()->findAll('academic_term_period_id=:academic_term_period_id and academic_term_organization_id = :org_id', array(':academic_term_period_id'=>(int) $_REQUEST['StudentTransaction']['student_academic_term_period_tran_id'], ':org_id'=>$org_id));
+             
+            $data=CHtml::listData($data,'academic_term_id','academic_term_name');
+            foreach($data as $value=>$name)
+            {
+                echo CHtml::tag('option',
+                        array('value'=>$value),CHtml::encode($name),true);
+            }
+         }
+
 /****************************************************************************************************************/
 
 //================== Batch Academic Term Update =============
@@ -354,9 +381,7 @@ $data=  AcademicTerm::model()->findAll('academic_term_period_id=:academic_term_p
 		$data= array();
 		$data1=array();
 		$data2= array();		
-		$data3=array();
-	
-		
+		$data3=array();		
 		// for update division
 
 		$data=Division::model()->findAll(array('condition'=>'branch_id='.(int) $_REQUEST['StudentTransaction']['student_transaction_branch_id'].' and academic_name_id='.(int)$_REQUEST['StudentTransaction']['student_academic_term_name_id'].' and division_organization_id='.$org_id));
@@ -365,7 +390,6 @@ $data=  AcademicTerm::model()->findAll('academic_term_period_id=:academic_term_p
 		{
 			$data2=Batch::model()->findAll(array('condition'=>'div_id='.$d1['division_id']));
 			break;
-
 		}
 	  	$data2=CHtml::listData($data2,'batch_id','batch_code');
 		foreach($data2 as $value2=>$name2)
@@ -1217,5 +1241,46 @@ $data=  AcademicTerm::model()->findAll('academic_term_period_id=:academic_term_p
             }
        
 	}
+	public function actiongetBlock()
+        {
+		$div = array();
+
+	        $result=HostelBlocks::model()->findAll('block_hostel_id = '.(int) $_REQUEST['HostelRoomMaster']['hostel_hostelinfo_id']);
+                
+	  	  $data=CHtml::listData($result,'block_id','block_name');
+	  	  $div .= "<option value=''>Select Block</option>";
+
+		  foreach($data as $value=>$name)
+		  {
+			$div .= CHtml::tag('option',
+				array('value'=>$value),CHtml::encode($name),true);
+		  }  
+		  
+		  echo CJSON::encode(array(
+			'div'=>$div,
+	    	  )); 
+
+	}
+// ========================== coursewise semester=================
+	public function actiongetSem()
+        {
+         	$sem = array();		
+		$data= array();		
+		
+		$data=Yii::app()->db->createCommand()
+			    ->select('academic_term_id,academic_term_name')
+			    ->from('academic_term')
+			    ->where('course_id='.(int) $_REQUEST['Batch']['course_id'].' and current_sem=1')
+			    ->queryAll();
+		//print_r($data); 
+		$data=CHtml::listData($data,'academic_term_id','academic_term_name');
+		 echo "<option value=''>Select Semester</option>";
+		foreach($data as $value=>$name)
+		{
+			echo CHtml::tag('option',
+				array('value'=>$value),CHtml::encode($name),true);
+		}	
+	    		 
+        }
 
 }

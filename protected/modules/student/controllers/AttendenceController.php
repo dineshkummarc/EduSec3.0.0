@@ -1,12 +1,8 @@
 <?php
 
-class AttendenceController extends RController
+class AttendenceController extends EduSecCustom
 {
 
-	/**
-	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
-	 * using two-column layout. See 'protected/views/layouts/column2.php'.
-	 */
 	public $row1;
 	public $layout='//layouts/column2';
 
@@ -17,32 +13,6 @@ class AttendenceController extends RController
 	{
 		return array(
 			'rights', // perform access control for CRUD operations
-		);
-	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view','searchstudid','displaychart','display','searchstudid1','getItemName','getItemName1','updatecreate','updatesave','Chart','viewchart','getItemBranch','chartreport','Popbrowser'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('@'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
 		);
 	}
 
@@ -76,8 +46,7 @@ class AttendenceController extends RController
 		
 		if(!empty($_POST['Attendence']['branch_id']) && !empty($_POST['search']) &&!empty($_POST['Attendence']['shift_id']) && !empty($_POST['Attendence']['div_id']) && !empty($_POST['Attendence']['sub_id']) && !empty($_POST['Attendence']['sem_id']) && !empty($_POST['Attendence']['employee_id']) && !empty($_POST['Attendence']['sem_name_id']) && !empty($_POST['Attendence']['student_attendence_period_id']) )
 		{
-			$model->attributes=$_POST['Attendence'];
-			
+			$model->attributes=$_POST['Attendence'];			
 			$st_per_id = $_POST['Attendence']['student_attendence_period_id'];
 			$branch_id=$model->branch_id;
 			$shift_id=$model->shift_id;
@@ -87,44 +56,38 @@ class AttendenceController extends RController
 			$sem_id=$model->sem_id;
 			$faculty_id = $model->employee_id;
 			$date = $model->attendence_date;
-			$sem_name = $model->sem_name_id;
-
-
-			
+			$sem_name = $model->sem_name_id;			
 			$subject_type = SubjectMaster::model()->findByPk($sub_id)->subject_master_type_id; 
-			$subject_type_name = SubjectType::model()->findByPk($subject_type)->subject_type_name;
-		
-			
+			$subject_type_name = SubjectType::model()->findByPk($subject_type)->subject_type_name;			
 			$all_array = array('branch_id'=>$branch_id,'faculty_id'=>$faculty_id,'shift_id'=>$shift_id,'div_id'=>$div_id,'batch_id'=>$batch_id,'sub_id'=>$sub_id,'sem_id'=>$sem_id,'date'=>$date,'sem_name'=>$sem_name,'st_per_id'=>$st_per_id);
 
 			if($subject_type_name == 'Elective')
 			{
 				$row1 = Yii::app()->db->createCommand()
-			        ->select('student_transaction_id,student_transaction_student_id,student_enroll_no,student_first_name')
+			        ->select('student_transaction_id,student_transaction_student_id,student_enroll_no,student_roll_no,student_first_name')
 				->from('student_transaction st')
 				->join('student_info','student_info_transaction_id=student_transaction_id')
 				 ->join('elective_subject_details esd','esd.elective_subject_student_id =st.student_transaction_student_id')
 				->where('st.student_transaction_division_id='.$div_id.' and esd.elective_subject_sem_id='.$sem_name.' and esd.elective_subject_id='.$sub_id.' order by student_enroll_no')
-				->queryAll();
-				
+				->queryAll();				
 			}
 			else if($model->batch_id)
 			{
 				$model->batch_id=$batch_id;
 				$row1 = Yii::app()->db->createCommand()
-				->select('student_transaction_id,student_transaction_student_id,student_enroll_no,student_first_name')
+				->select('student_transaction_id,student_transaction_student_id,student_roll_no,student_enroll_no,student_first_name')
 				->from('student_transaction')
 				->join('student_info','student_info_transaction_id=student_transaction_id')
-				->where('student_transaction_branch_id='.$branch_id.' and student_transaction_shift_id='.$shift_id.' and student_transaction_division_id='.$div_id.' and student_transaction_batch_id='.$batch_id.' and student_academic_term_name_id='.$sem_name.' and student_academic_term_period_tran_id ='.$sem_id.' and student_transaction_detain_student_flag <> 2 order by student_enroll_no')
+				->where('student_transaction_branch_id='.$branch_id.' and student_transaction_shift_id='.$shift_id.' and student_transaction_division_id='.$div_id.' and student_transaction_batch_id='.$batch_id.' and student_academic_term_name_id='.$sem_name.' and student_academic_term_period_tran_id ='.$sem_id.' and student_transaction_detain_student_flag in(5, 6)  order by student_enroll_no')
 				->queryAll();
 			}
 			else
 			{
 				$row1 = Yii::app()->db->createCommand()
-				->select('student_transaction_id,student_transaction_student_id,student_enroll_no,student_first_name')
+				->select('student_transaction_id,student_transaction_student_id,student_roll_no,student_enroll_no,student_first_name')
 				->from('student_transaction')
 				->join('student_info','student_info_transaction_id=student_transaction_id')
-				->where('student_transaction_branch_id='.$branch_id.' and student_transaction_shift_id='.$shift_id.' and student_transaction_division_id='.$div_id.' and student_academic_term_name_id='.$sem_name.' and student_academic_term_period_tran_id ='.$sem_id.' and student_transaction_detain_student_flag <> 2 order by student_enroll_no')
+				->where('student_transaction_branch_id='.$branch_id.' and student_transaction_shift_id='.$shift_id.' and student_transaction_division_id='.$div_id.' and student_academic_term_name_id='.$sem_name.' and student_academic_term_period_tran_id ='.$sem_id.' and student_transaction_detain_student_flag in(5, 6) order by student_enroll_no')
 				->queryAll();
 			}
 			$count = count($row1);			
@@ -188,9 +151,77 @@ class AttendenceController extends RController
 			'model'=>$model,'row1'=>$row1,
 		));
 	}
-	public function actionShowstudentview()
+		public function actionShowstudentview()
 	{
 		$model=new Attendence;
+		$count = 0;
+		$row1 = array();
+		$date = null;
+		$period_no = $_REQUEST['lec_no'];
+		$sub_id=$_REQUEST['subject_id'];
+		$faculty_id=$_REQUEST['faculty_id'];
+		$batch_id=$_REQUEST['batch'];
+		$timetableid = $_REQUEST['timetableid'];
+		$date = date('Y-m-d',strtotime($_REQUEST['date']));
+		$subject_type = SubjectMaster::model()->findByPk($sub_id)->subject_master_type_id; 
+		$subject_type_name = SubjectType::model()->findByPk($subject_type)->subject_type_name;
+		$timetable=TimetableDetail::model()->findByPk($_REQUEST['timetableid']);	
+
+		$row1 = Yii::app()->db->createCommand()
+			->select('student_transaction_id, student_transaction_student_id,  student_first_name, student_roll_no, student_middle_name, student_last_name')
+				->from('student_transaction')
+				->join('student_info','student_info_transaction_id=student_transaction_id')
+				->where('student_transaction_batch_id='.$batch_id.' order by student_roll_no')
+				->queryAll();
+
+		$check = Yii::app()->db->createCommand()
+			->select('*')
+			->from('attendence')
+			->where('employee_id='.$_REQUEST['faculty_id'].' AND batch_id='.$_REQUEST['batch'].' AND student_attendence_period_id='.$_REQUEST['lec_no'].' AND attendence_date = "'.$date.'"')
+			->queryrow();
+		if($check)
+		{
+			echo "Attendance already taken.!";
+			exit;	
+		}
+		$count = count($row1);
+			
+		if($count == 0)
+		{
+			Yii::app()->user->setFlash('not-select-attendece', "No Student Found for this Criteria");
+		}		
+
+		if(isset($_POST['save']))
+		{
+
+		$model->employee_id=$faculty_id;				
+		$model->batch_id=$batch_id;
+		$model->sub_id=$sub_id;
+		$model->attendence_date = $date;
+		$model->student_attendence_period_id = $period_no;			   
+		$model->timetable_id = $timetableid;
+		foreach($_POST['Attendence']['st_id'] as $index=>$student_id )
+  	        {
+			$model->setIsNewRecord(true);
+			$model->attendence = 'A';
+			if($student_id!=0)
+				$model->attendence = 'P';
+				$model->st_id = $index;		
+				$model->id=null;				
+		   		$model->save();
+			   }
+			$this->redirect(array('admin'));
+		}
+
+		$this->render('show_student_view',array(
+			'model'=>$model,'row1'=>$row1,'timetabledetail'=>$timetable
+		));
+	}
+	
+	public function actionShowallstudentview()
+	{
+		$model=new Attendence;
+		$timetabledetail = new TimeTableDetail;
 		$count = 0;
 		$row1 = array();
 		$div=Division::model()->findByPk($_REQUEST['division_id']);
@@ -209,7 +240,7 @@ class AttendenceController extends RController
 		if($subject_type_name == 'Elective')
 		{
 			$row1 = Yii::app()->db->createCommand()
-			        ->select('student_transaction_id,student_transaction_student_id, student_enroll_no,student_first_name')
+			        ->select('student_transaction_id,student_transaction_student_id,student_roll_no, student_enroll_no,student_first_name, student_middle_name, student_last_name')
 				->from('student_transaction st')	
 				->join('student_info','student_info_transaction_id=student_transaction_id')
 				 ->join('elective_subject_details esd','esd.elective_subject_student_id =st.student_transaction_student_id')
@@ -222,27 +253,27 @@ class AttendenceController extends RController
 		{
 			$batch_id=$_REQUEST['batch'];
 			$row1 = Yii::app()->db->createCommand()
-				->select('student_transaction_id,student_transaction_student_id, student_enroll_no,student_first_name')
+				->select('student_transaction_id,student_transaction_student_id, student_enroll_no,student_first_name,student_roll_no, student_middle_name, student_last_name')
 				->from('student_transaction')
 				->join('student_info','student_info_transaction_id=student_transaction_id')
-				->where('student_transaction_branch_id='.$branch_id.' and student_transaction_division_id='.$div_id.' and student_transaction_batch_id='.$batch_id.' and student_academic_term_name_id='.$sem_name.' and student_academic_term_period_tran_id ='.$sem_id.' and student_transaction_detain_student_flag <> 2 order by student_enroll_no')
+				->where('student_transaction_branch_id='.$branch_id.' and student_transaction_division_id='.$div_id.' and student_transaction_batch_id='.$batch_id.' and student_academic_term_name_id='.$sem_name.' and student_academic_term_period_tran_id ='.$sem_id.' and student_transaction_detain_student_flag in(5, 6) order by student_enroll_no')
 				->queryAll();
 			$all_array = array('branch_id'=>$branch_id,'period_no'=>$period_no,'shift_id'=>$shift_id,'faculty_id'=>$_REQUEST['faculty_id'],'div_id'=>$div_id,'batch_id'=>$batch_id,'sub_id'=>$sub_id,'sem_id'=>$sem_id,'date'=>$date,'sem_name'=>$sem_name);			
 		}
 		else
 		{
 			$row1 = Yii::app()->db->createCommand()
-				->select('student_transaction_id,student_transaction_student_id, student_enroll_no,student_first_name')
+				->select('student_transaction_id,student_transaction_student_id,student_roll_no, student_enroll_no,student_first_name, student_middle_name, student_last_name')
 				->from('student_transaction')
 				->join('student_info','student_info_transaction_id=student_transaction_id')
-				->where('student_transaction_branch_id='.$branch_id.' and student_transaction_division_id='.$div_id.' and student_academic_term_name_id='.$sem_name.' and student_academic_term_period_tran_id ='.$sem_id.' and student_transaction_detain_student_flag <> 2 order by student_enroll_no')
+				->where('student_transaction_branch_id='.$branch_id.' and student_transaction_division_id='.$div_id.' and student_academic_term_name_id='.$sem_name.' and student_academic_term_period_tran_id ='.$sem_id.' and student_transaction_detain_student_flag in (5, 6) order by student_enroll_no')
 				->queryAll();
 				$all_array = array('branch_id'=>$branch_id,'shift_id'=>$shift_id,'div_id'=>$div_id,'batch_id'=>"",'sub_id'=>$sub_id,'sem_id'=>$sem_id,'date'=>$date,'sem_name'=>$sem_name,'period_no'=>$period_no,'faculty_id'=>$_REQUEST['faculty_id']);
 		}
 	
-		if($date > date('Y-m-d') || $date < date('Y-m-d', strtotime( '-1 days' )))
+		if($date > date('Y-m-d') || $date < date('Y-m-d', strtotime( '-6 days' )))
 		{	
-			echo "you can not take attendance of before date of yesterday or future date!";
+			echo "you can not take attendance of before week date or future date!";
 			exit;	
 		}
 		if($_REQUEST['batch']!=0)
@@ -298,10 +329,11 @@ class AttendenceController extends RController
 		}
 
 		$this->render('show_student_view',array(
-			'model'=>$model,'row1'=>$row1,
+			'model'=>$model,'row1'=>$row1, 'timetabledetail'=>$timetabledetail,
 		));
 	}
-	
+
+
 
 	public function actionSearchstudid1()
 	{
@@ -330,7 +362,7 @@ class AttendenceController extends RController
 			foreach($row1 as $r1)
 			{
 
-				$final[$i] = $r1['student_transaction_student_id'];   // we have insert student info table in attendence table.....
+				$final[$i] = $r1['student_transaction_student_id'];  
 				$i++;
 			}
 			
@@ -393,10 +425,6 @@ class AttendenceController extends RController
 		$count = 0;
 		$row1 = array();
 	
-		// Uncomment the following line if AJAX validation is needed
-		//$this->performAjaxValidation($model);
-
-		
 		if(isset($_POST['Attendence']))
 		{
 			$model->attributes=$_POST['Attendence']; 		
@@ -432,143 +460,17 @@ class AttendenceController extends RController
 			
 			if($count == 0)
 			{
-				//echo "No data found";
-				//$this->redirect(array('attendence/create'));	
 				Yii::app()->user->setFlash('not-select-attendece', "No Student Found for this Criteria");
 				$this->redirect(array('create'));
 			}
 			Yii::app()->user->setState('stud_array',$row1);	
 			Yii::app()->user->setState('all_array',$all_array);	
 		
-		//	$this->redirect(array('admin'));
 		}
-		//exit;
 		$this->render('display',array(
 			'model'=>$model,'row1'=>$row1,
 		));
 	}
-
-	/*
-	public function actionsearchstudid()
-	{
-		$model=new Attendence;
-		
-		$tran=new StudentTransaction;
-		$count = 0;
-		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
-
-		
-		if(isset($_POST['Attendence']))
-		{
-			$model->attributes=$_POST['Attendence'];
-			
-			$branch_id=$model->branch_id;
-			$shift_id=$model->shift_id;
-			$div_id=$model->div_id;
-			$batch_id=$model->batch_id;
-			$sem_id=$model->sem_id;
-			
-			if($model->batch_id)
-			{
-			$row1 = Yii::app()->db->createCommand()
-			->select('student_transaction_id,student_transaction_student_id')
-			->from('student_transaction')
-			->where('student_transaction_branch_id='.$branch_id.' and student_transaction_shift_id='.$shift_id.' and student_transaction_division_id='.$div_id.' and student_transaction_batch_id='.$batch_id)
-			->queryAll();
-			}
-			else
-			{
-			$row1 = Yii::app()->db->createCommand()
-			->select('student_transaction_id,student_transaction_student_id')
-			->from('student_transaction')
-			->where('student_transaction_branch_id='.$branch_id.' and student_transaction_shift_id='.$shift_id.' and student_transaction_division_id='.$div_id)
-			->queryAll();
-			}
-			$count = count($row1);
-			
-			if($count == 0)
-			{
-				//echo "No data found";
-				//$this->redirect(array('attendence/create'));	
-				Yii::app()->user->setFlash('not-select-attendece', "No Student Found for this Criteria");
-				$this->redirect(array('create'));
-			}
-			//$this->redirect(array('admin'));
-		}
-		
-		$this->render('searchstudid',array(
-			'model'=>$model,'row1'=>$row1,
-		));		
-	} 
-	
-	
-	
-
-	
-	public function actionupdateCreate()
-	{
-		$model=new Attendence;
-		
-		$tran=new StudentTransaction;
-		$count = 0;
-		$row1 = array();
-	
-		// Uncomment the following line if AJAX validation is needed
-		$this->performAjaxValidation($model);
-
-		
-		if(isset($_POST['Attendence']))
-		{
-			$model->attributes=$_POST['Attendence'];
-			
-			$branch_id=$model->branch_id;
-			$shift_id=$model->shift_id;
-			$div_id=$model->div_id;
-			$batch_id=$model->batch_id;
-			$sub_id=$model->sub_id;
-			$sem_id=$model->sem_id;
-			$date = $model->attendence_date;
-			$sem_name = $model->sem_name_id;
-			
-			$all_array = array('branch_id'=>$branch_id,'shift_id'=>$shift_id,'div_id'=>$div_id,'batch_id'=>$batch_id,'sub_id'=>$sub_id,'sem_id'=>$sem_id,'date'=>$date,'sem_name'=>$sem_name);
-
-			if($model->batch_id)
-			{
-			$row1 = Yii::app()->db->createCommand()
-			->select('id,st_id,attendence,shift_id,sem_id,sem_name_id,branch_id,sub_id,batch_id,attendence_date')
-			->from('attendence')
-			->where('branch_id='.$branch_id.' and shift_id='.$shift_id.' and div_id='.$div_id.' and sub_id='.$sub_id.' and sem_id='.$sem_id.' and batch_id='.$batch_id.' and attendence_date="'.$date.'"')
-			->queryAll();
-
-			}
-			else
-			{
-			$row1 = Yii::app()->db->createCommand()
-			->select('id,st_id,attendence,shift_id,sem_id,sem_name_id,branch_id,sub_id,attendence_date')
-			->from('attendence')
-			->where('branch_id='.$branch_id.' and shift_id='.$shift_id.' and div_id='.$div_id.' and sub_id='.$sub_id.' and sem_id='.$sem_id.' and attendence_date="'.$date.'"')
-			->queryAll();
-			}
-	
-			Yii::app()->user->setState('stud_array',$row1);	
-			Yii::app()->user->setState('all_array',$all_array);	
-			$count = count($row1)	;
-			//echo $count;
-			if($count == 0)
-			{
-				//echo "No data found";
-				//$this->redirect(array('attendence/create'));	
-				Yii::app()->user->setFlash('not-select-attendece', "No Student Found for this Criteria");
-				$this->redirect(array('updatecreate'));
-			}
-		
-		}
-		
-		$this->render('update_create',array(
-			'model'=>$model,'row1'=>$row1,
-		));
-	}*/
 	
 	/**
 	 * Updates a particular model.
@@ -843,7 +745,7 @@ class AttendenceController extends RController
 					->select('*')
 					->from('student_transaction stud')
 					->join('student_info stud_info', 'stud_info.student_id = stud.student_transaction_student_id')
-					->where('stud_info.student_enroll_no="'.$en.'" and stud.student_transaction_organization_id='.Yii::app()->user->getState('org_id'))
+					->where('stud_info.student_enroll_no="'.$en.'"')
 					->queryRow();
 
 
@@ -947,7 +849,7 @@ class AttendenceController extends RController
 				   $subject_data = Yii::app()->db->createCommand()
 		        	   		->select('*')
 						->from('subject_master')
-						->where('subject_master_id in (select sub_id from attendence where branch_id='.$student_data['student_transaction_branch_id'].' and sem_id='.$student_data['student_academic_term_period_tran_id'].') and subject_master_academic_terms_name_id IN('.$sem_array.') AND subject_master_organization_id='.Yii::app()->user->getState('org_id'))
+						->where('subject_master_id in (select sub_id from attendence where branch_id='.$student_data['student_transaction_branch_id'].' and sem_id='.$student_data['student_academic_term_period_tran_id'].') and subject_master_academic_terms_name_id IN('.$sem_array.') ')
 						->queryAll();
 				
 				   $new_start=$month_start;
@@ -1092,178 +994,224 @@ class AttendenceController extends RController
 		));
 	}
 
-	public function actionAttendencedivisionreport()
-	{
-		$model = new Attendence;
-		$model->scenario = 'attendencedivisionreport';
-		$this->performAjaxValidation($model);
-		
-		if(isset($_POST['Attendence'])||isset($_REQUEST['div_id']))
+	public function actionAttendencedivisionreport() //changes done by janvi.
+    	{
+        $model = new Attendence;
+        $model->scenario = 'attendencedivisionreport';
+        $this->performAjaxValidation($model);
+        $month = null;       
+        $student=array();
+        $subject_data=array();
+        $sid=array();
+        $subject=0;
+        $subjectid=array();
+        $deleivered_topic=array();	
+		if(isset($_POST['Attendence'])|| isset($_REQUEST['branch_id']))
 		{
-			
-			if(isset($_REQUEST['div_id']))
-			{
-				$div = $_REQUEST['div_id'];
-				
-			}
-			else
-			{
-				$div =$_POST['Attendence']['div_id'];
-			}
-
-			$subject = Attendence::model()->findAll(array('select'=>'sub_id',
-    						'distinct'=>true,
-						'condition'=>'div_id='.$div));
-			$all_data = Attendence::model()->findAll(array('select'=>'st_id',
-    						'distinct'=>true,
-						'condition'=>'div_id='.$div));
-			$subjectid = array();
-			$total = array();
-			$sub = array();
-			$present = array();
-			foreach($subject as $list)
-			{
-				$data1 = Attendence::model()->findAll(array('condition'=>'sub_id='.$list['sub_id']));
-				$total[] = count($data1);
-				$data2 = Attendence::model()->findAll(array('condition'=>'sub_id='.$list['sub_id']." AND attendence='P'"));
-				$present[] = count($data2);
-				$sub_mod = SubjectMaster::model()->findByPk($list['sub_id']);
-				$sub[] = $sub_mod->subject_master_name."(".SubjectType::model()->findByPk($sub_mod->subject_master_type_id)->subject_type_name.")";	
-				$subjectid[] = $list['sub_id'];
-			} 
-			if(isset($_REQUEST['pdf']))
-			{
-				Yii::import('application.extensions.tcpdf.*');
-				require_once('tcpdf/tcpdf.php');
-				require_once('tcpdf/config/lang/eng.php');
-		
-			     	
-					   
-				$html = $this->renderPartial('attendence_division_pdf', array('total'=>$total,
-								'present'=>$present,
-								'subject'=>$sub,
-								'div_id'=>$div
-								),
-								 true);
-				//$session->close();
-		
-				//die($html);
-				ob_clean();
-				$pdf = new TCPDF();
-				$pdf->SetCreator(PDF_CREATOR);
-				$pdf->SetAuthor(Yii::app()->name);
-				$pdf->SetTitle('Division Attendence Report');
-				$pdf->SetSubject('Division Attendence Report');
-				$pdf->SetKeywords('example, text, report');
-				$pdf->SetHeaderData('', 0, "Division Attendence", '');
-				//$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, "Example Report by ".Yii::app()->name, "");
-				$pdf->setHeaderFont(Array('helvetica', '', 8));
-				$pdf->setFooterFont(Array('helvetica', '', 6));
-				$pdf->SetMargins(15, 18, 15);
-				$pdf->SetHeaderMargin(5);
-				$pdf->SetFooterMargin(10);
-				$pdf->SetAutoPageBreak(TRUE, 15);
-				$pdf->SetFont('dejavusans', '', 7);
-				$resolution= array(150, 150);
-			       	$pdf->AddPage('P', $resolution);
-				$pdf->writeHTML($html, true, false, true, false, '');
-				$pdf->LastPage();
-				$pdf->Output("attendenceDivision.pdf", "I");	
-			}
-			else if(isset($_REQUEST['excel']))
-			{
-				Yii::app()->request->sendFile(date('YmdHis').'.xls',
-				$this->renderPartial('attendence_division_pdf', array('total'=>$total,
-								'present'=>$present,
-								'subject'=>$sub,
-								'div_id'=>$div,
-								),
-								 true));
-			}
-			else if(isset($_REQUEST['studentpdf']))
-			{
-				Yii::import('application.extensions.tcpdf.*');
-				require_once('tcpdf/tcpdf.php');
-				require_once('tcpdf/config/lang/eng.php');
-		
-			     	
-					   
-				$html = $this->renderPartial('divisionwise_student_attendance_pdfexcel', array('total'=>$total,
-								'present'=>$present,
-								'subject'=>$sub,
-								'div_id'=>$div,
-								'sub_id'=>$subject,
-								'all_data'=>$all_data,
-								'subjectid'=>$subjectid
-								),
-								 true);
-				//$session->close();
-		
-				//die($html);
-				ob_clean();
-				$pdf = new TCPDF();
-				$pdf->SetCreator(PDF_CREATOR);
-				$pdf->SetAuthor(Yii::app()->name);
-				$pdf->SetTitle('Division Attendence Report');
-				$pdf->SetSubject('Division Attendence Report');
-				$pdf->SetKeywords('example, text, report');
-				$pdf->SetHeaderData('', 0, "Division Attendence", '');
-				//$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, "Example Report by ".Yii::app()->name, "");
-				$pdf->setHeaderFont(Array('helvetica', '', 8));
-				$pdf->setFooterFont(Array('helvetica', '', 6));
-				$pdf->SetMargins(15, 18, 15);
-				$pdf->SetHeaderMargin(5);
-				$pdf->SetFooterMargin(10);
-				$pdf->SetAutoPageBreak(TRUE, 15);
-				$pdf->SetFont('dejavusans', '', 7);
-				$resolution= array(150, 150);
-			       	$pdf->AddPage('P', $resolution);
-				$pdf->writeHTML($html, true, false, true, false, '');
-				$pdf->LastPage();
-				$pdf->Output("StudentAttendance.pdf", "I");	
-			}
-			else if(isset($_REQUEST['studentexcel']))
-			{
-				Yii::app()->request->sendFile(date('YmdHis').'.xls',
-				$this->renderPartial('divisionwise_student_attendance_pdfexcel', array('total'=>$total,
-								'present'=>$present,
-								'subject'=>$sub,
-								'div_id'=>$div,
-								'sub_id'=>$subject,
-								'all_data'=>$all_data,
-								'subjectid'=>$subjectid
-								),
-								 true));
-			}
-			else if(isset($_REQUEST['subject']))
-			{
-				$this->render('student_subjectwise',array(
-								'subject'=>$sub,
-								'sub_id'=>$subject,
-								'all_data'=>$all_data,
-								'subjectid'=>$subjectid
-								));
-			}
-
-			else
-			{
-				$this->render('attendence_division_report_view',array('total'=>$total,
-								'present'=>$present,
-								'subject'=>$sub,
-								'div_id'=>$div,
-								'sub_id'=>$subject,
-								'all_data'=>$all_data,
-								'subjectid'=>$subjectid
-								));
-
-			}
-			
-		}
-		else
+		    $query=null;      
+		    $timetable_query=null;	     
+		    if(!empty($_REQUEST['branch_id']))
+		    {
+		        $branch = $_REQUEST['branch_id'];
+		        $query .="branch_id=".$branch. " AND ";
+			$timetable_query.="branch_id=".$branch. " AND ";
+		    }
+		    else
+		    {
+		        $branch =$_POST['Attendence']['branch_id'];
+		        $query .="branch_id=".$branch. " AND ";
+			$timetable_query.="branch_id=".$branch. " AND ";
+		    }
+		    if(!empty($_REQUEST['sem_id']))
+		    {
+		        $sem = $_REQUEST['sem_id'];
+		        $query .="sem_name_id=".$sem. " AND ";
+			$timetable_query.="acdm_name_id=".$sem. " AND ";
+		    }
+		    else
+		    {
+		        $sem =$_POST['Attendence']['sem_name_id'];
+		        $query .="sem_name_id=".$sem." AND ";
+			$timetable_query.="acdm_name_id=".$sem. " AND ";
+		    }
+		    if(!empty($_REQUEST['div_id']))   
+		    {
+		        $div=$_REQUEST['div_id'];
+		        $query .="div_id=".$div;
+			$timetable_query.="division_id=".$div. " AND ";
+		    }
+		    if(!empty($_POST['Attendence']['div_id']))
+		    {
+		        $div=$_POST['Attendence']['div_id'];
+		        $query .="div_id=".$div;
+			$timetable_query.="division_id=".$div. " AND ";
+		    }           
+		 if(!empty($_POST['months']) && !empty($_POST['subject']) || !empty($_REQUEST['month']) && !empty($_REQUEST['subject']) )
 		{
-			$this->render('attendence_division_report',array('model'=>$model));
-		}
-	}
+		    if(!empty($_REQUEST['month']))
+		    {
+		        $month=$_REQUEST['month'];
+		        $subject=$_REQUEST['subject'];
+			$timetable_query.="subject_id=".$subject." AND ";			
+		    }
+		    else
+		    {
+		        $month = $_POST['months'];			
+		        $subject=$_POST['subject'];
+			$timetable_query.="subject_id=".$subject." AND ";
+		    }       
+		
+    //query for display list of regular student attendence( not to display detain/left student)
+
+            $student=Attendence::model()->findAll(array(
+		'select'=>'st_id','distinct'=>true,
+	        'condition'=>$query));    
+	    $timetabledetail=TimeTableDetail::model()->findAll(array('select'=>'lecture_date,actual_topic,lect_hour','condition'=>$timetable_query.' month(lecture_date)='.$month,'order' => 'lecture_date ASC'));
+		 
+		    $timetable=array();
+		    foreach($timetabledetail as $t)
+		    {
+			if($t['actual_topic']!='')	
+                          $deleivered_topic[$t['lecture_date']]=$t['actual_topic'];
+		    }	
+       
+            foreach($student as $s )
+            {                       
+            //student name
+                $data3 =Attendence::model()->findAll(array('condition'=>'st_id='.$s['st_id']));
+                $stud_name=StudentInfo::model()->findByPk($s['st_id']);
+                $sid[]=$s['st_id'];                           
+            }
+        }
+            if(isset($_REQUEST['pdf']))
+            {
+                Yii::import('application.extensions.tcpdf.*');
+                require_once('tcpdf/tcpdf.php');
+                require_once('tcpdf/config/lang/eng.php');
+                                       
+                $html = $this->renderPartial('attendence_division_pdf', array('total'=>$total,
+                                'present'=>$present,
+                                'subject'=>$sub,
+                                'div_id'=>$div
+                                ),
+                                 true);
+                //$session->close();       
+                //die($html);
+                ob_clean();
+                $pdf = new TCPDF();
+                $pdf->SetCreator(PDF_CREATOR);
+                $pdf->SetAuthor(Yii::app()->name);
+                $pdf->SetTitle('Division Attendence Report');
+                $pdf->SetSubject('Division Attendence Report');
+                $pdf->SetKeywords('example, text, report');
+                $pdf->SetHeaderData('', 0, "Division Attendence", '');
+                //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, "Example Report by ".Yii::app()->name, "");
+                $pdf->setHeaderFont(Array('helvetica', '', 8));
+                $pdf->setFooterFont(Array('helvetica', '', 6));
+                $pdf->SetMargins(15, 18, 15);
+                $pdf->SetHeaderMargin(5);
+                $pdf->SetFooterMargin(10);
+                $pdf->SetAutoPageBreak(TRUE, 15);
+                $pdf->SetFont('dejavusans', '', 7);
+                $resolution= array(150, 150);
+                $pdf->AddPage('P', $resolution);
+                $pdf->writeHTML($html, true, false, true, false, '');
+                $pdf->LastPage();
+                $pdf->Output("attendenceDivision.pdf", "I");   
+            }
+            else if(isset($_REQUEST['excel']))
+            {
+		
+                Yii::app()->request->sendFile(date('YmdHis').'.xls',
+                $this->renderPartial('attendence_division_pdf', array(
+                                'branch_id'=>$branch,
+                                'div_id'=>$div,
+                                'student_id'=>$sid,
+                                'month'=>$month,
+                                'selsub'=>$subject,
+                                'sem'=>$sem,
+				'deleivered_topic'=>$deleivered_topic,
+                                ),
+                                 true));
+            }
+            else if(isset($_REQUEST['studentpdf']))
+            {
+                Yii::import('application.extensions.tcpdf.*');
+                require_once('tcpdf/tcpdf.php');
+                require_once('tcpdf/config/lang/eng.php');   
+                      
+            $html = $this->renderPartial('divisionwise_student_attendance_pdfexcel', array('total'=>$total,
+                                'present'=>$present,
+                                'subject'=>$sub,
+                                'div_id'=>$div,
+                                'sub_id'=>$subject,
+                                'all_data'=>$all_data,
+                                'subjectid'=>$subjectid,
+                                'subject_data'=>$subject_data,
+                                'student_data'=>$student_data,
+                                'sid'=>$sid,
+               
+                'start'=>$start,'end'=>$end,'month_value'=>$month,'year'=>$year
+                                ),
+                                 true);
+                //$session->close();       
+                //die($html);
+                ob_clean();
+                $pdf = new TCPDF();
+                $pdf->SetCreator(PDF_CREATOR);
+                $pdf->SetAuthor(Yii::app()->name);
+                $pdf->SetTitle('Division Attendence Report');
+                $pdf->SetSubject('Division Attendence Report');
+                $pdf->SetKeywords('example, text, report');
+                $pdf->SetHeaderData('', 0, "Division Attendence", '');
+                //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, "Example Report by ".Yii::app()->name, "");
+                $pdf->setHeaderFont(Array('helvetica', '', 8));
+                $pdf->setFooterFont(Array('helvetica', '', 6));
+                $pdf->SetMargins(15, 18, 15);
+                $pdf->SetHeaderMargin(5);
+                $pdf->SetFooterMargin(10);
+                $pdf->SetAutoPageBreak(TRUE, 15);
+                $pdf->SetFont('dejavusans', '', 7);
+                $resolution= array(150, 150);
+                $pdf->AddPage('P', $resolution);
+                $pdf->writeHTML($html, true, false, true, false, '');
+                $pdf->LastPage();
+                $pdf->Output("StudentAttendance.pdf", "I");   
+            }
+            else if(isset($_REQUEST['studentexcel']))
+            {
+                Yii::app()->request->sendFile(date('YmdHis').'.xls',
+                $this->renderPartial('divisionwise_student_attendance_pdfexcel', array('total'=>$total,
+                                'present'=>$present,
+                                'subject'=>$sub,
+                                'div_id'=>$div,
+                                'sub_id'=>$subject,
+                                'all_data'=>$all_data,
+                                'subjectid'=>$subjectid,				
+                                ),
+                                 true));
+            }
+            else
+            {
+		
+	        $this->render('attendence_division_report_view',array(
+                                'branch_id'=>$branch,
+                                'div_id'=>$div,
+                                'student_id'=>$sid,
+                                'month'=>$month,
+                                'selsub'=>$subject,
+				'subjectid'=>$subjectid,
+                                'sem'=>$sem,
+                               'deleivered_topic'=>$deleivered_topic,       
+                                ));
+            }           
+        }
+        else
+        {
+            $this->render('attendence_division_report',array('model'=>$model));
+        }
+    }
+
 	public function actionStudentAttendenceReport()	//done by Ravi B
     	{
 	       $model=new Attendence;
@@ -1335,7 +1283,7 @@ class AttendenceController extends RController
 			
 				
 			$this->render('student_report_view',array(
-				       'subject_data'=>$subject_data,'student_data'=>$student_data,'start'=>$start,'end'=>$end,));		
+				       'subject_data'=>$subject_data,'student_data'=>$student_data,'start'=>$start,'end'=>$end,'model'=>$model));		
 				     }
 
 
@@ -1404,7 +1352,7 @@ class AttendenceController extends RController
 			
 				
 				   $this->render('monthwise_student_attend',array(
-				       'subject_data'=>$subject_data,'student_data'=>$student_data,'start'=>$start,'end'=>$end,'month_value'=>$month,'year'=>$year));	
+				       'subject_data'=>$subject_data,'student_data'=>$student_data,'start'=>$start,'end'=>$end,'month_value'=>$month,'year'=>$year,'model'=>$model));	
 				}
 				else
 				{
@@ -1415,17 +1363,66 @@ class AttendenceController extends RController
 			   }		
 			}
 	
-		}//!empty($_POST['Attendence']['student_enroll_no']) if end
+		}
 		
 		else 
 		{	
+		   if(isset($_REQUEST['id']))
+		   {
+			$student_data= Yii::app()->db->createCommand()
+					->select('*')
+					->from('student_transaction stud')
+					->join('student_info stud_info', 'stud_info.student_id = stud.student_transaction_student_id')
+					->where('stud_info.student_info_transaction_id='.$_REQUEST['id'])
+					->queryRow();
+
+			$sem_id=$student_data['student_academic_term_name_id'];
+			$semester = Yii::app()->db->createCommand()
+		        	   		->select('*')
+						->from('academic_term')
+						->where('academic_term_id='.$sem_id)
+						->queryRow();
+			$start=$semester['academic_term_start_date'];
+			$end=$semester['academic_term_end_date'];
+			$att_info = Attendence::model()->findAll(array(
+					'select'=>'sem_name_id',
+					'distinct'=>true,
+					'condition'=>'attendence_date >=:date_start and attendence_date <= :date_end and st_id = :stu_id',
+					'params'=>array(':date_start'=>$semester['academic_term_start_date'],':date_end'=>$semester['academic_term_end_date'],'stu_id'=>$_REQUEST['id'])
+));			$sem_data = array();	
+			
+			foreach($att_info as $list)
+				$sem_data[] = $list['sem_name_id'];
+			if($sem_data){
+				$sem_array = implode(',',$sem_data);
+
+			$subject_data = Yii::app()->db->createCommand()
+		        	->select('*')
+				->from('subject_master')
+				->where('subject_master_id in (select sub_id from attendence where branch_id='.$student_data['student_transaction_branch_id'].' and sem_id='.$student_data['student_academic_term_period_tran_id'].') and subject_master_academic_terms_name_id IN('.$sem_array.')')
+				->queryAll();
+			$this->render('student_report_view',array(
+                          'model'=>$model, 'subject_data'=>$subject_data,'student_data'=>$student_data,'start'=>$start,'end'=>$end,
+			));
+		   }	
+		   else
+		    {   
+			Yii::app()->user->setFlash('no_student_found', "No Data Found for Current semester.");
+			$this->render('student_attendence_report',array(
+                          'model'=>$model, 
+			));
+		     }	
+		 }
+		else{
                	$this->render('student_attendence_report',array(
                        'model'=>$model,
                		));		
 		}    
-       	}
+       		}
+	    }	
 
-	public function actionStudentwisereportpdf() {
+	public function actionStudentwisereportpdf() 
+	{
 
 		if(!empty($_REQUEST['student_enroll_no']) && !empty($_REQUEST['start']) && !empty($_REQUEST['end']))
 		{
@@ -1459,16 +1456,6 @@ class AttendenceController extends RController
 				->where('subject_master_id in (select sub_id from attendence where branch_id='.$stud_trans['student_transaction_branch_id'].' and sem_id='.$stud_trans['student_academic_term_period_tran_id'].') and subject_master_academic_terms_name_id IN('.$sem_array.')  AND subject_master_organization_id='.Yii::app()->user->getState('org_id'))
 				->queryAll();
 
-				//$subject_data = SubjectMaster::model()->findAll(array('condition'=>'subject_master_academic_terms_period_id='.$stud_trans['student_academic_term_period_tran_id'].' AND subject_master_academic_terms_name_id IN('.$sem_array.') AND subject_master_branch_id ='.$stud_trans['student_transaction_branch_id'].' AND subject_master_organization_id='.Yii::app()->user->getState('org_id')));
-				
-
-			
-
-			/*$new_start=$_REQUEST['start'];
-			$new_end=$_REQUEST['end'];
-				
-			$start = date("Y-m-d", strtotime($new_start));
-			$end = date("Y-m-d", strtotime($new_end));*/
 			if(isset($_REQUEST['studenewisereportpdf'])) {
 			Yii::import('application.extensions.tcpdf.*');
 				require_once('tcpdf/tcpdf.php');
@@ -1555,9 +1542,10 @@ class AttendenceController extends RController
                         array('value'=>$value),CHtml::encode($name),true);
             }
         }
-	
-	
-	
 
+	public function actionTakeAttendance()
+	{
+
+	}
 	
 }

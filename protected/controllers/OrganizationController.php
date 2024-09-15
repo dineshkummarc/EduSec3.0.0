@@ -87,12 +87,12 @@ class OrganizationController extends RController
 				fclose($fp);
 				if($model->file_type == "image/png") {
 				$src_img = imagecreatefrompng($file->tempName);
-                                $dst_img = imagecreatetruecolor(200, 170);
+                                $dst_img = imagecreatetruecolor(90, 70);
 				imagealphablending($dst_img, false);
- imagesavealpha($dst_img,true);
- $transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
- imagefilledrectangle($dst_img, 0, 0, 200, 170, $transparent);
-                                imagecopyresampled($dst_img, $src_img, 0,0,0,0, 200,170, imagesx($src_img), imagesy($src_img));
+				imagesavealpha($dst_img,true);
+				$transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
+				imagefilledrectangle($dst_img, 0, 0, 90, 70, $transparent);
+                                imagecopyresampled($dst_img, $src_img, 0,0,0,0, 90, 70, imagesx($src_img), imagesy($src_img));
                                 imagepng($dst_img);                                
                                 ob_start();
                                 imagepng($dst_img);
@@ -101,12 +101,12 @@ class OrganizationController extends RController
 			}
 			if($model->file_type == "image/jpg" || $model->file_type == "image/jpeg") {
 				$src_img = imagecreatefromjpeg($file->tempName);
-                                $dst_img = imagecreatetruecolor(200, 170);
+                                $dst_img = imagecreatetruecolor(90, 70);
 				imagealphablending($dst_img, false);
- imagesavealpha($dst_img,true);
- $transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
- imagefilledrectangle($dst_img, 0, 0, 200, 170, $transparent);
-                                imagecopyresampled($dst_img, $src_img, 0,0,0,0, 200,170, imagesx($src_img), imagesy($src_img));
+				imagesavealpha($dst_img,true);
+				$transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
+				imagefilledrectangle($dst_img, 0, 0, 90, 70, $transparent);
+                                imagecopyresampled($dst_img, $src_img, 0,0,0,0, 90, 70, imagesx($src_img), imagesy($src_img));
                                 imagejpeg($dst_img);                                
                                 ob_start();
                                 imagepng($dst_img);
@@ -115,12 +115,12 @@ class OrganizationController extends RController
 			}
 			if($model->file_type == "image/gif") {
 				$src_img = imagecreatefromgif($file->tempName);
-                                $dst_img = imagecreatetruecolor(200, 170);
+                                $dst_img = imagecreatetruecolor(90, 70);
 				imagealphablending($dst_img, false);
- imagesavealpha($dst_img,true);
- $transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
- imagefilledrectangle($dst_img, 0, 0, 200, 170, $transparent);
-                                imagecopyresampled($dst_img, $src_img, 0,0,0,0, 200,170, imagesx($src_img), imagesy($src_img));
+				imagesavealpha($dst_img,true);
+				$transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
+				imagefilledrectangle($dst_img, 0, 0, 90, 70, $transparent);
+                                imagecopyresampled($dst_img, $src_img, 0,0,0,0, 90, 70, imagesx($src_img), imagesy($src_img));
                                 imagepng($dst_img);                                
                                 ob_start();
                                 imagecreatefromgif($dst_img);
@@ -187,12 +187,12 @@ class OrganizationController extends RController
 				
 			if($model->file_type == "image/png") {
 				$src_img = imagecreatefrompng($file->tempName);
-                                $dst_img = imagecreatetruecolor(200, 170);
+                                $dst_img = imagecreatetruecolor(90, 70);
 				imagealphablending($dst_img, false);
- imagesavealpha($dst_img,true);
- $transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
- imagefilledrectangle($dst_img, 0, 0, 200, 170, $transparent);
-                                imagecopyresampled($dst_img, $src_img, 0,0,0,0, 200,170, imagesx($src_img), imagesy($src_img));
+				imagesavealpha($dst_img,true);
+				$transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
+				imagefilledrectangle($dst_img, 0, 0, 90, 70, $transparent);
+				imagecopyresampled($dst_img, $src_img, 0,0,0,0, 90, 70, imagesx($src_img), imagesy($src_img));
                                 imagepng($dst_img);                                
                                 ob_start();
                                 imagepng($dst_img);
@@ -201,12 +201,12 @@ class OrganizationController extends RController
 			}
 			if($model->file_type == "image/jpeg" || $model->file_type =="image/jpg") {
 				$src_img = imagecreatefromjpeg($file->tempName);
-                                $dst_img = imagecreatetruecolor(200, 170);
+                                $dst_img = imagecreatetruecolor(90, 70);
 				imagealphablending($dst_img, false);
- imagesavealpha($dst_img,true);
- $transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
- imagefilledrectangle($dst_img, 0, 0, 200, 170, $transparent);
-                                imagecopyresampled($dst_img, $src_img, 0,0,0,0, 200,170, imagesx($src_img), imagesy($src_img));
+				imagesavealpha($dst_img,true);
+				$transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
+				imagefilledrectangle($dst_img, 0, 0, 90, 70, $transparent);
+                                imagecopyresampled($dst_img, $src_img, 0,0,0,0, 90, 70, imagesx($src_img), imagesy($src_img));
                                 imagejpeg($dst_img);                                
                                 ob_start();
                                 imagejpeg($dst_img);
@@ -215,12 +215,12 @@ class OrganizationController extends RController
 			}
 			if($model->file_type == "image/gif") {
 				$src_img = imagecreatefromgif($file->tempName);
-                                $dst_img = imagecreatetruecolor(200, 170);
+                                $dst_img = imagecreatetruecolor(90, 70);
 				imagealphablending($dst_img, false);
- imagesavealpha($dst_img,true);
- $transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
- imagefilledrectangle($dst_img, 0, 0, 200, 170, $transparent);
-                                imagecopyresampled($dst_img, $src_img, 0,0,0,0, 200,170, imagesx($src_img), imagesy($src_img));
+				imagesavealpha($dst_img,true);
+				$transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
+				imagefilledrectangle($dst_img, 0, 0, 90, 70, $transparent);
+                                imagecopyresampled($dst_img, $src_img, 0,0,0,0, 90, 70, imagesx($src_img), imagesy($src_img));
                                 imagegif($dst_img);                                
                                 ob_start();
                                 imagegif($dst_img);
@@ -233,7 +233,7 @@ class OrganizationController extends RController
 
 		}
 			$model->save(false);
-			$this->redirect(array('view', 'id'=>$model->organization_id));
+			$this->redirect(array('admin'));
 		}
 		$this->render('update',array(
 			'model'=>$model,
@@ -255,10 +255,6 @@ class OrganizationController extends RController
 			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 			if(!isset($_GET['ajax']))
 				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-		}
-		else if(!Yii::app()->request->isPostRequest) {
-			$this->loadModel($id)->delete();
-			$this->redirect(array('admin'));
 		}
 		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');

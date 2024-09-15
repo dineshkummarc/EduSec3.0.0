@@ -2,11 +2,7 @@
 
 /**
  * This is the model class for table "employee_photos".
- *
- * The followings are the available columns in table 'employee_photos':
- * @property integer $employee_photos_id
- * @property string $employee_photos_desc
- * @property string $employee_photos_path
+ * @package EduSec.Employee.models
  */
 class EmployeePhotos extends CActiveRecord
 {
@@ -36,9 +32,6 @@ class EmployeePhotos extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-//			array('employee_photos_path', 'required'),
-			//array('employee_photos_desc', 'length', 'max'=>50),
-			//array('employee_photos_path', 'length', 'max'=>150),
 			array('employee_photos_path', 'file','maxSize'=>1024*1024*2, 'tooLarge'=>'The Photo was larger than 2MB. Please upload a smaller photo.',  'types'=>'jpg, jpeg, gif, png, JPG', 'allowEmpty'=>true,'message'=>'File is not valid'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

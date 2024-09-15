@@ -1,12 +1,7 @@
 <?php
-
 /**
  * This is the model class for table "employee_docs_trans".
- *
- * The followings are the available columns in table 'employee_docs_trans':
- * @property integer $employee_docs_trans_id
- * @property integer $employee_docs_trans_user_id
- * @property integer $employee_docs_trans_emp_docs_id
+* @package EduSec.Employee.models
  */
 class EmployeeDocsTrans extends CActiveRecord
 {
@@ -94,21 +89,12 @@ class EmployeeDocsTrans extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
-		if(Yii::app()->user->getState('emp_id') && !Yii::app()->user->checkAccess('EmployeeTransaction.UpdateEmployeeData'))
-		{
-		$criteria->condition = 'employee_docs_trans_user_id = :employee_user_id';
-	        $criteria->params = array(':employee_user_id' =>Yii::app()->user->getState('emp_id'));
-		}
-		else if(Yii::app()->user->getState('emp_id') && Yii::app()->user->checkAccess('EmployeeTransaction.UpdateEmployeeData'))
-		{
-		$criteria->condition = 'employee_docs_trans_user_id = :employee_user_id';
-	        $criteria->params = array(':employee_user_id' => $_REQUEST['id']);
-		}
-		else
-		{
-		$criteria->condition = 'employee_docs_trans_user_id = :employee_user_id';
-	        $criteria->params = array(':employee_user_id' => $_REQUEST['id']);
-		}
+		$trans = EmployeeTransaction::model()->resetScope()->findByPk($_REQUEST['id']);
+		$users = EmployeeTransaction::model()->resetScope()->findAll('employee_transaction_user_id='.$trans->employee_transaction_user_id);	
+		$arr = CHtml::listData($users,'employee_transaction_id','employee_transaction_id');	
+
+		$criteria->addInCondition('employee_docs_trans_user_id',$arr);
+
 		$criteria->compare('employee_docs_trans_id',$this->employee_docs_trans_id);
 		$criteria->compare('employee_docs_trans_user_id',$this->employee_docs_trans_user_id);
 		$criteria->compare('employee_docs_trans_emp_docs_id',$this->employee_docs_trans_emp_docs_id);

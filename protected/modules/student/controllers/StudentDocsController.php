@@ -1,4 +1,8 @@
 <?php
+/*****************************************************************************************
+ * EduSec is a college management program developed by
+ * Rudra Softech, Inc. Copyright (C) 2013-2014.
+ ****************************************************************************************/
 
 class StudentDocsController extends Controller
 {
@@ -63,9 +67,6 @@ class StudentDocsController extends Controller
 	{
 		$model=new StudentDocs;
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
-
 		if(isset($_POST['StudentDocs']))
 		{
 			$model->attributes=$_POST['StudentDocs'];
@@ -86,9 +87,6 @@ class StudentDocsController extends Controller
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
 
 		if(isset($_POST['StudentDocs']))
 		{

@@ -47,9 +47,12 @@ class StudentAcademicRecordTrans extends CActiveRecord
 			array('student_academic_record_trans_stud_id, student_academic_record_trans_qualification_id, student_academic_record_trans_eduboard_id, student_academic_record_trans_record_trans_year_id, theory_mark_obtained, theory_mark_max, theory_percentage', 'required','message'=>""),
 			array('student_academic_record_trans_stud_id, student_academic_record_trans_qualification_id, student_academic_record_trans_eduboard_id, student_academic_record_trans_record_trans_year_id, theory_mark_obtained, theory_mark_max, practical_mark_obtained, practical_mark_max', 'numerical', 'integerOnly'=>true,'message'=>""),
 			array('theory_percentage, practical_percentage', 'numerical'),
+			array('theory_mark_obtained','compare','compareAttribute'=>'theory_mark_max','operator'=>'<=','message'=>'Theory Marks Obtained must be less than max marks'),
+			array('practical_mark_obtained','compare','compareAttribute'=>'practical_mark_max','operator'=>'<=','message'=>'Theory Marks Obtained must be less than max marks'),
+			array('practical_percentage','compare','compareValue'=>'100','operator'=>'<=','message'=>'Percentage Always Less Than 100'),
 
-			array('theory_mark_max','checkMarks','message'=>'Obtained Marks Can Not Be Greater Than Max Marks'),
-			array('theory_percentage','checkpercentage','message'=>'Percentage Always Less Than 100'),
+			//array('theory_mark_max','checkMarks','message'=>'Obtained Marks Can Not Be Greater Than Max Marks'),
+			array('theory_percentage','compare','compareValue'=>'100','operator'=>'<=','message'=>'Percentage Always Less Than 100'),
 			array('theory_mark_obtained, theory_mark_max, practical_mark_obtained, practical_mark_max','length','max'=>4),
 
 			array('theory_mark_obtained, theory_mark_max, practical_mark_obtained, practical_mark_max','numerical',
@@ -75,40 +78,11 @@ class StudentAcademicRecordTrans extends CActiveRecord
 		return array(
 		'Rel_student_qualification' => array(self::BELONGS_TO, 'Qualification', 'student_academic_record_trans_qualification_id'),
 		'Rel_student_eduboard' => array(self::BELONGS_TO, 'Eduboard', 'student_academic_record_trans_eduboard_id'),
+		'Rel_student_year' => array(self::BELONGS_TO, 'Year', 'student_academic_record_trans_record_trans_year_id'),
 		);
 	}
 
-	public function checkMarks($attribute,$params)
-	{
-	    	if(($this->theory_mark_obtained > $this->theory_mark_max) || ($this->practical_mark_obtained > $this->practical_mark_max))
-		{
-			if(($this->theory_mark_obtained > $this->theory_mark_max) && ($this->practical_mark_obtained > $this->practical_mark_max)) 
-			{
-				$this->addError('theory_mark_obtained','Obtained Marks Always Less Than Max Mark');
-				$this->addError('practical_mark_obtained','Obtained Marks Always Less Than Max Mark');
-			}
-			else if($this->theory_mark_obtained > $this->theory_mark_max)
-				$this->addError('theory_mark_obtained','Obtained Marks Always Less Than Max Mark');
-			else
-				$this->addError('practical_mark_obtained','Obtained Marks Always Less Than Max Mark');
-		}	
-	}
-	public function checkpercentage($attribute,$params)
-	{
-		if(($this->theory_percentage > 100) || ($this->practical_percentage > 100))
-		{
-			if(($this->theory_percentage > 100) && ($this->practical_percentage > 100)) 
-			{
-				$this->addError('theory_percentage','Percentage Always Less Than 100');
-				$this->addError('practical_percentage','Percentage Always Less Than 100');
-			}
-			else if($this->theory_percentage > 100)
-				$this->addError('theory_percentage','Percentage Always Less Than 100');
-			else
-				$this->addError('practical_percentage','Percentage Always Less Than 100');
-		}	
-	}
-	
+		
 	/**
 	 * @return array customized attribute labels (name=>label)
 	 */
@@ -192,29 +166,4 @@ class StudentAcademicRecordTrans extends CActiveRecord
 			return $student_qualification;
 	}
 
-	/*public function beforesave()
-	{
-		if(($this->theory_mark_obtained > $this->theory_mark_max) || ($this->practical_mark_obtained > $this->practical_mark_max))
-		{
-			if(($this->theory_mark_obtained > $this->theory_mark_max) && ($this->practical_mark_obtained > $this->practical_mark_max)) 
-			{
-				$this->addError('theory_mark_obtained','obtained Marks always Less than Max Mark');
-				$this->addError('practical_mark_obtained','obtained Marks always Less than Max Mark');
-			}
-			else if($this->theory_mark_obtained > $this->theory_mark_max)
-				$this->addError('theory_mark_obtained','obtained Marks always Less than Max Mark');
-			else
-				$this->addError('practical_mark_obtained','obtained Marks always Less than Max Mark');
-			return false;
-		
-		}
-		else
-		{
-			return true;
-		}	
-		
-
-	}
-	*/
-		
-}
+}	

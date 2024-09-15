@@ -1,10 +1,9 @@
 <?php
+/*****************************************************************************************
+ * EduSec is a college management program developed by
+ * Rudra Softech, Inc. Copyright (C) 2013-2014.
+ ****************************************************************************************/
 
-/**
- * LoginForm class.
- * LoginForm is the data structure for keeping
- * user login form data. It is used by the 'login' action of 'SiteController'.
- */
 class Sendsms extends CFormModel
 {
 	public $phone_no;
@@ -12,8 +11,6 @@ class Sendsms extends CFormModel
 
 	/**
 	 * Declares the validation rules.
-	 * The rules state that username and password are required,
-	 * and password needs to be authenticated.
 	 */
 	public function rules()
 	{
@@ -28,9 +25,4 @@ class Sendsms extends CFormModel
 		
 		);
 	}
-
-	/**
-	 * Declares attribute labels.
-	 */
-
 }

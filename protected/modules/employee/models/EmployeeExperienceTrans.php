@@ -2,13 +2,7 @@
 
 /**
  * This is the model class for table "employee_experience_trans".
- *
- * The followings are the available columns in table 'employee_experience_trans':
- * @property integer $employee_experience_trans_id
- * @property integer $employee_experience_trans_user_id
- * @property integer $employee_experience_trans_emp_experience_id
- * @property integer $employee_experience_trans_organization_id
-
+ * @package EduSec.modules.employee.models
  */
 class EmployeeExperienceTrans extends CActiveRecord
 {
@@ -39,10 +33,10 @@ class EmployeeExperienceTrans extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('employee_experience_trans_user_id, employee_experience_trans_emp_experience_id', 'required'),
-			array('employee_experience_trans_user_id,employee_experience_trans_organization_id, employee_experience_trans_emp_experience_id', 'numerical', 'integerOnly'=>true),
+			array('employee_experience_trans_user_id, employee_experience_trans_emp_experience_id', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('employee_experience_trans_id,employee_experience_trans_organization_id, employee_experience_trans_user_id, employee_experience_trans_emp_experience_id', 'safe', 'on'=>'search'),
+			array('employee_experience_trans_id, employee_experience_trans_user_id, employee_experience_trans_emp_experience_id', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,8 +61,6 @@ class EmployeeExperienceTrans extends CActiveRecord
 			'employee_experience_trans_id' => 'Employee Experience Trans',
 			'employee_experience_trans_user_id' => 'Employee Experience Trans User',
 			'employee_experience_trans_emp_experience_id' => 'Employee Experience Trans Emp Experience',
-			'employee_experience_trans_organization_id' => 'organization',
-			'employee_experience_organization_name' => 'Organization Name',
 			'employee_experience_designation' => 'Designation',
 			'employee_experience_from' => 'Date From',
 			'employee_experience_to' => 'Date To',
@@ -90,7 +82,6 @@ class EmployeeExperienceTrans extends CActiveRecord
 		$criteria->compare('employee_experience_trans_id',$this->employee_experience_trans_id);
 		$criteria->compare('employee_experience_trans_user_id',$this->employee_experience_trans_user_id);
 		$criteria->compare('employee_experience_trans_emp_experience_id',$this->employee_experience_trans_emp_experience_id);
-		$criteria->compare('employee_experience_trans_organization_id',$this->employee_experience_trans_organization_id);
 		
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -102,21 +93,11 @@ class EmployeeExperienceTrans extends CActiveRecord
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
-		if(Yii::app()->user->getState('emp_id') && !Yii::app()->user->checkAccess('EmployeeTransaction.UpdateEmployeeData'))
-		{
-		$criteria->condition = 'employee_experience_trans_user_id = :employee_user_id';
-		$criteria->params = array(':employee_user_id' =>Yii::app()->user->getState('emp_id'));
-		}
-		else if(Yii::app()->user->getState('emp_id') && Yii::app()->user->checkAccess('EmployeeTransaction.UpdateEmployeeData'))
-		{
-		$criteria->condition = 'employee_experience_trans_user_id = :employee_user_id';
-		$criteria->params = array(':employee_user_id' => $_REQUEST['id']);
-		}
-		else
-		{
-		$criteria->condition = 'employee_experience_trans_user_id = :employee_user_id';
-		$criteria->params = array(':employee_user_id' => $_REQUEST['id']);
-		}
+		$trans = EmployeeTransaction::model()->resetScope()->findByPk($_REQUEST['id']);
+		$users = EmployeeTransaction::model()->resetScope()->findAll('employee_transaction_user_id='.$trans->employee_transaction_user_id);	
+		$arr = CHtml::listData($users,'employee_transaction_id','employee_transaction_id');	
+
+		$criteria->addInCondition('employee_experience_trans_user_id',$arr);
 		$criteria->compare('employee_experience_trans_id',$this->employee_experience_trans_id);
 		$criteria->compare('employee_experience_trans_user_id',$this->employee_experience_trans_user_id);
 		$criteria->compare('employee_experience_trans_emp_experience_id',$this->employee_experience_trans_emp_experience_id);

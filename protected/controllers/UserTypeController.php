@@ -71,7 +71,6 @@ class UserTypeController extends Controller
 			$model->attributes=$_POST['UserType'];
 			$model->created_by=Yii::app()->user->id;
 			$model->creation_date=new CDbExpression('NOW()');
-			$model->user_type_organization_id=Yii::app()->user->getState('org_id');
 			if($model->save())
 				//$this->redirect(array('view','id'=>$model->user_type_id));
 				$this->redirect(array('admin'));
@@ -113,34 +112,13 @@ class UserTypeController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		if(Yii::app()->request->isPostRequest)
-		{
-			// we only allow deletion via POST request
-			try{
-			    $this->loadModel($id)->delete();
-			    if(!isset($_GET['ajax']))
-				    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-			}catch (CDbException $e){
-				throw new CHttpException(400,'You can not delete this record because it is used in another table.');
-			}
+		try{
+		    $this->loadModel($id)->delete();
+		    if(!isset($_GET['ajax']))
+			    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		}catch (CDbException $e){
+			throw new CHttpException(400,'You can not delete this record because it is used in another table.');
 		}
-		else
-			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
-	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		$model=new UserType('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['UserType']))
-			$model->attributes=$_GET['UserType'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
 	}
 
 	/**

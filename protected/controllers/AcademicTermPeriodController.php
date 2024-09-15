@@ -79,7 +79,7 @@ class AcademicTermPeriodController extends RController
 		{
 			$model->attributes=$_POST['AcademicTermPeriod'];
 			
-			$model->academic_terms_period_organization_id = Yii::app()->user->getState('org_id');
+			//$model->academic_terms_period_organization_id = Yii::app()->user->getState('org_id');
 			$model->academic_terms_period_created_by = Yii::app()->user->id;
             		$model->academic_terms_period_creation_date = new CDbExpression('NOW()');
 			if($model->save())
@@ -123,31 +123,20 @@ class AcademicTermPeriodController extends RController
 	 */
 	public function actionDelete($id)
 	{
-		if(Yii::app()->request->isPostRequest)
+		$academic_term_p = AcademicTermPeriod::model()->findAll(array('condition'=>'academic_terms_period_id='.$id));
+		if(!empty($academic_term_p))
 		{
 			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
-
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-		}
-		else if(!Yii::app()->request->isPostRequest) {
-			$stud_tran = StudentTransaction::model()->findAll(array('condition'=>'student_academic_term_period_tran_id='.$id));
-			$semester= AcademicTerm::model()->findAll(array('condition'=>'academic_term_period_id='.$id));
-			if(!empty($stud_tran) || !empty($semester))
-			{
+			try{
+			    $this->loadModel($id)->delete();
+			    if(!isset($_GET['ajax']))
+				    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			    }catch (CDbException $e){
 				throw new CHttpException(400,'You can not delete this record because it is used in another table.');
-			}
-			else
-			{
-				$this->loadModel($id)->delete();
-				$this->redirect( array('admin'));
-			}
+			    }
 		}
 		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
-
 	}
 
 	/**
@@ -184,7 +173,7 @@ class AcademicTermPeriodController extends RController
 
 		$this->render('admin',array(
 			'model'=>$model,
-		)); 
+		));
 	}
 
 	/**
@@ -219,8 +208,8 @@ class AcademicTermPeriodController extends RController
 		array(
 			'academic_terms_period_id',
 			'academic_term_period',
-			'Rel_org.organization_name',
-			'Rel_user.user_organization_email_id',
+			//'Rel_org.organization_name',
+			//'Rel_user.user_organization_email_id',
 		),
 		'AcademicPeriod',
 		array(

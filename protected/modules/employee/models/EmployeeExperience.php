@@ -1,14 +1,7 @@
 <?php
-
 /**
  * This is the model class for table "employee_experience".
- *
- * The followings are the available columns in table 'employee_experience':
- * @property integer $employee_experience_id
- * @property string $employee_experience_organization_name
- * @property string $employee_experience_designation
- * @property string $employee_experience_from
- * @property string $employee_experience_to
+* @package EduSec.Employee.models
  */
 class EmployeeExperience extends CActiveRecord
 {
@@ -41,7 +34,7 @@ class EmployeeExperience extends CActiveRecord
 			array('employee_experience_organization_name,employee_experience_designation, employee_experience_from, employee_experience_to', 'required', 'message'=>''),
 			array('employee_experience_organization_name', 'length', 'max'=>50),
 			array('employee_experience_designation', 'length', 'max'=>25),
-			array('employee_experience_organization_name, employee_experience_designation','CRegularExpressionValidator','pattern'=>'/^[a-zA-Z.& ]+([-][a-zA-Z ]+)*$/','message'=>''), 
+			//array('employee_experience_organization_name, employee_experience_designation','CRegularExpressionValidator','pattern'=>'/^[a-zA-Z.& ]+([-][a-zA-Z ]+)*$/','message'=>''), 
 			 
 		//array('employee_experience_from, employee_experience_to','unique','message'=>'Already Exists.'),
 			// call validdate function

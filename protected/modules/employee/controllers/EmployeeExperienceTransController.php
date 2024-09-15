@@ -1,6 +1,5 @@
 <?php
-
-class EmployeeExperienceTransController extends RController
+class EmployeeExperienceTransController extends EduSecCustom
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -15,32 +14,6 @@ class EmployeeExperienceTransController extends RController
 	{
 		return array(
 			'rights', // perform access control for CRUD operations
-		);
-	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('@'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
 		);
 	}
 
@@ -63,8 +36,7 @@ class EmployeeExperienceTransController extends RController
 	{
 		$model=new EmployeeExperienceTrans;
 		$emp_exp=new EmployeeExperience;
-
-		//$this->layout='receipt_layout';
+		$this->layout='no-portlet';
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation(array($model,$emp_exp));
@@ -99,7 +71,7 @@ class EmployeeExperienceTransController extends RController
 				
 				$this->redirect(array('employeeTransaction/employeeExperience','id'=>$model->employee_experience_trans_user_id));
 			}
-				//$this->redirect(array('view','id'=>$model->employee_experience_trans_id));
+			
 		}
 
 		$this->render('create',array(
@@ -115,6 +87,7 @@ class EmployeeExperienceTransController extends RController
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
+		$this->layout='no-portlet';
 		$emp_exp = EmployeeExperience::model()->findByPk($model->employee_experience_trans_emp_experience_id);
 
 		// Uncomment the following line if AJAX validation is needed
@@ -164,38 +137,10 @@ class EmployeeExperienceTransController extends RController
 	 */
 	public function actionDelete($id)
 	{
-	//$emp_exp = EmployeeExperience;	
-		if(Yii::app()->request->isPostRequest)
-		{
-			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
-			//$emp_exp->loadModel(EmployeeExperience::model()->findByPk($model->employee_experience_trans_emp_experience_id))->delete();
-			
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-		}
-		else
-			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
-	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-/*		$dataProvider=new CActiveDataProvider('EmployeeExperienceTrans');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));*/
-		$model=new EmployeeExperienceTrans('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['EmployeeExperienceTrans']))
-			$model->attributes=$_GET['EmployeeExperienceTrans'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
+		$this->loadModel($id)->delete();
+		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+		if(!isset($_GET['ajax']))
+			$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 	}
 
 	/**
@@ -213,6 +158,9 @@ class EmployeeExperienceTransController extends RController
 		));
 	}
 
+	/**
+	* This action display date of the employee experience data.
+	*/
 	public function actionEmployeeExperience()
 	{
 		$model=new EmployeeExperienceTrans('mysearch');
@@ -224,6 +172,7 @@ class EmployeeExperienceTransController extends RController
 			'employeeexperience'=>$model,
 		));
 	}
+
 	/**
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.

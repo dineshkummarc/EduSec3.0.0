@@ -40,7 +40,8 @@ class LanguagesKnown extends CActiveRecord
 		return array(
 			//array('languages_known1', 'required','message'=>''),
 			//array('languages_known1, languages_known2, languages_known3, languages_known4','required','message'=>'','on'=>'Update'),
-			array('languages_known1, languages_known2, languages_known3, languages_known4', 'numerical', 'integerOnly'=>true),
+			array(' languages_known2, languages_known3, languages_known4', 'numerical', 'integerOnly'=>true),
+			array('languages_known1','safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('languages_known_id, languages_known1, languages_known2, languages_known3, languages_known4', 'safe', 'on'=>'search'),

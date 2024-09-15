@@ -2,13 +2,7 @@
 
 /**
  * This is the model class for table "employee_docs".
- *
- * The followings are the available columns in table 'employee_docs':
- * @property integer $employee_docs_id
- * @property string $doc_category_id
- * @property string $title
- * @property string $employee_docs_desc
- * @property string $employee_docs_path
+ * @package EduSec.modules.employee.models
  */
 class EmployeeDocs extends CActiveRecord
 {
@@ -44,7 +38,7 @@ class EmployeeDocs extends CActiveRecord
 			array('employee_docs_path', 'file', 'types'=>'jpeg, jpg, pdf, txt, doc, gif, png', 'maxSize'=>1024*1024*2, 'tooLarge'=>'The document was larger than 2MB. Please upload a smaller document.',),
 			
 			//array('title','CRegularExpressionValidator','pattern'=>'/^[a-zA-Z& ]+([-]*[a-zA-Z0-9 ]+)*$/','message'=>''),
-			array('employee_docs_desc','CRegularExpressionValidator','pattern'=>'/^([A-Za-z1-9 ]+)$/','message'=>''),
+			//array('employee_docs_desc','CRegularExpressionValidator','pattern'=>'/^([A-Za-z1-9 ]+)$/','message'=>''),
 //			array('employee_docs_path', 'length', 'max'=>150),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.

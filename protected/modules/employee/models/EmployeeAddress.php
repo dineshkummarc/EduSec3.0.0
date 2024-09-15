@@ -2,23 +2,7 @@
 
 /**
  * This is the model class for table "employee_address".
- *
- * The followings are the available columns in table 'employee_address':
- * @property integer $employee_address_id
- * @property string $employee_address_c_line1
- * @property string $employee_address_c_line2
- * @property integer $employee_address_c_city
- * @property integer $employee_address_c_pincode
- * @property integer $employee_address_c_state
- * @property integer $employee_address_c_country
- * @property string $employee_address_p_line1
- * @property string $employee_address_p_line2
- * @property integer $employee_address_p_city
- * @property integer $employee_address_p_pincode
- * @property integer $employee_address_p_state
- * @property integer $employee_address_p_country
- * @property integer $employee_address_phone
- * @property integer $employee_address_mobile
+ * @package EduSec.Employee.models
  */
 class EmployeeAddress extends CActiveRecord
 {
@@ -50,15 +34,13 @@ class EmployeeAddress extends CActiveRecord
 		// will receive user inputs.
 		return array(
 
-			array('employee_address_c_city, employee_address_c_pincode, employee_address_c_state, employee_address_c_country, employee_address_p_city, employee_address_p_pincode, employee_address_p_state, employee_address_p_country, employee_address_phone, employee_address_mobile, address_chkbox', 'numerical', 'integerOnly'=>true,'message'=>''),
+			array('employee_address_c_city, employee_address_c_pincode, employee_address_c_state, employee_address_c_country, employee_address_p_city, employee_address_p_pincode, employee_address_p_state, employee_address_p_country, employee_address_c_phone,employee_address_p_phone,employee_address_c_mobile, employee_address_p_mobile', 'numerical', 'integerOnly'=>true,'message'=>''),
 
 			array('employee_address_c_taluka,employee_address_c_district,employee_address_p_taluka,employee_address_p_district','safe'),
 
 			array('employee_address_c_pincode,employee_address_p_pincode,', 'length', 'max'=>6),
-			array('employee_address_phone, employee_address_mobile,', 'length', 'max'=>12),
-			array('employee_address_p_taluka,employee_address_p_district,employee_address_c_taluka,employee_address_c_district','CRegularExpressionValidator','pattern'=>'/^([a-zA-z ]+)$/','message'=>''),
-	//		array('employee_address_c_line1, employee_address_c_line2, employee_address_p_line1, employee_address_p_line2','CRegularExpressionValidator','pattern'=>'/^[a-zA-Z0-9\/ ]+([-][a-zA-Z0-9\/ ]+)*$/','message'=>''),
-
+			//array('employee_address_phone, employee_address_mobile,', 'length', 'max'=>12),
+			//array('employee_address_p_taluka,employee_address_p_district,employee_address_c_taluka,employee_address_c_district','CRegularExpressionValidator','pattern'=>'/^([a-zA-z ]+)$/','message'=>''),
 			array('employee_address_c_line1, employee_address_c_line2, employee_address_p_line1, employee_address_p_line2', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -91,24 +73,26 @@ class EmployeeAddress extends CActiveRecord
 	{
 		return array(
 			'employee_address_id' => 'Employee Address',
-			'employee_address_c_line1' => 'Line1',
-			'employee_address_c_line2' => 'Line2',
+			'employee_address_c_line1' => 'Street 1',
+			'employee_address_c_line2' => 'Street 2',
 			'employee_address_c_city' => 'City',
 			'employee_address_c_pincode' => 'Pincode',
 			'employee_address_c_state' => 'State',
 			'employee_address_c_country' => 'Country',
-			'employee_address_p_line1' => 'Line1',
-			'employee_address_p_line2' => 'Line2',
-			'employee_address_p_city' => 'City',
+			'employee_address_p_line1' => 'Street 1',
+			'employee_address_p_line2' => 'Street 2',
+			'employee_address_p_city' => 'Town',
 			'employee_address_p_pincode' => 'Pincode',
 			'employee_address_p_state' => 'State',
 			'employee_address_p_country' => 'Country',
-			'employee_address_phone' => 'Phone No',
-			'employee_address_mobile' => 'Mobile No',
-			'employee_address_c_taluka'=>'Taluka',
-			'employee_address_c_district'=>'District',
-			'employee_address_p_taluka'=>'Taluka',
-			'employee_address_p_district'=>'District',
+			//'employee_address_phone' => 'Phone No',
+			//'employee_address_mobile' => 'Mobile No',
+			'employee_c_house_no' => 'House No',
+			'employee_p_house_no' => 'House No',
+			'employee_address_c_mobile'=> 'Mobile',
+			'employee_address_c_phone'=>'Phone',
+			'employee_address_p_mobile'=> 'Mobile',
+			'employee_address_p_phone'=>'Phone',
 		);
 	}
 

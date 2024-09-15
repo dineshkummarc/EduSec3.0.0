@@ -1,4 +1,8 @@
 <?php
+/*****************************************************************************************
+ * EduSec is a college management program developed by
+ * Rudra Softech, Inc. Copyright (C) 2013-2014.
+ ****************************************************************************************/
 
 class UnitDetailTableController extends RController
 {
@@ -19,32 +23,6 @@ class UnitDetailTableController extends RController
 	}
 
 	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
-
-	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
@@ -55,43 +33,6 @@ class UnitDetailTableController extends RController
 		));
 	}
 
-	public function actionNewCreate($id, $cid)
-	{
-		$model=new UnitDetailTable;
-		
-
-		$this->performAjaxValidation($model);
-		   if(isset($_POST['UnitDetailTable']))
-		   {
-			$model->attributes=$_POST['UnitDetailTable'];
-			$model->unit_detail_unit_master_id = $id;
-			$model->unit_detail_course_id = $cid;
-			$model->unit_detail_created_by = Yii::app()->user->id;
-			$model->unit_detail_creation_date = new CDbExpression('NOW()');
-			if($model->save()) {
-			  if (Yii::app()->request->isAjaxRequest)
-	                  {
-		            echo CJSON::encode(array(
-		                'status'=>'success', 
-		                //'div'=>"Classroom successfully added"
-		                ));
-		            exit;               
-		          }          
-	     	        }
-		   }
-
-		if (Yii::app()->request->isAjaxRequest)
-		{
-		    echo CJSON::encode(array(
-		        'status'=>'failure', 
-		        'div'=>$this->renderPartial('_newform', array('model'=>$model), true)));
-		    exit;               
-		}
-		else
-		    $this->render('newCreate',array('model'=>$model,));
-
-	}
-
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -99,9 +40,7 @@ class UnitDetailTableController extends RController
 	public function actionCreate()
 	{
 		$model=new UnitDetailTable;
-
-		// Uncomment the following line if AJAX validation is needed
-		 $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['UnitDetailTable']))
 		{
@@ -129,9 +68,7 @@ class UnitDetailTableController extends RController
 	{
 		$model=$this->loadModel($id);
 		$model->unit_lec_date = date('d-m-Y',strtotime($model->unit_lec_date));
-
-		// Uncomment the following line if AJAX validation is needed
-		 $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['UnitDetailTable']))
 		{

@@ -2,13 +2,7 @@
 
 /**
  * This is the model class for table "document_category_master".
- *
- * The followings are the available columns in table 'document_category_master':
- * @property integer $doc_category_id
- * @property string $doc_category_name
- * @property integer $created_by
- * @property string $creation_date
- * @property integer $docs_category_organization_id
+ * @package EduSec.models
  */
 class DocumentCategoryMaster extends CActiveRecord
 {
@@ -45,15 +39,15 @@ class DocumentCategoryMaster extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('doc_category_name, created_by, creation_date', 'required','message'=>''),
-			array('created_by, docs_category_organization_id', 'numerical', 'integerOnly'=>true),
-array('document_category','required','on'=>'studentDocumentsearch','message'=>''),
-array('department,document_category','required','on'=>'documentsearch','message'=>''),
+			array('created_by', 'numerical', 'integerOnly'=>true),
+			array('document_category','safe','on'=>'studentDocumentsearch','message'=>''),
+			array('department','required','on'=>'documentsearch','message'=>''),
+			array('document_category','safe','on'=>'documentsearch','message'=>''),
 			array('doc_category_name', 'length', 'max'=>30),
-			//array('doc_category_name','CRegularExpressionValidator','pattern'=>'/^[a-zA-Z& ]+([-][a-zA-Z ]+)*$/','message'=>''),
 			array('doc_category_name', 'unique','message'=>'Already Exists.'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('doc_category_id, doc_category_name, created_by, creation_date, docs_category_organization_id', 'safe', 'on'=>'search'),
+			array('doc_category_id, doc_category_name, created_by, creation_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -66,7 +60,6 @@ array('department,document_category','required','on'=>'documentsearch','message'
 		// class name for the relations automatically generated below.
 		return array(
 			'Rel_document_user' => array(self::BELONGS_TO, 'User', 'created_by'),
-		       'Rel_document_org' => array(self::BELONGS_TO, 'Organization', 'docs_category_organization_id'),
 		);
 	}
 
@@ -80,7 +73,6 @@ array('department,document_category','required','on'=>'documentsearch','message'
 			'doc_category_name' => 'Category Name',
 			'created_by' => 'Created By',
 			'creation_date' => 'Creation Date',
-			'docs_category_organization_id' => 'Organization',
 			'academic_year'=>'Academic Year',
 			'sem'=>'Semester',
 			'branch'=>'Branch',
@@ -99,18 +91,30 @@ array('department,document_category','required','on'=>'documentsearch','message'
 		// should not be searched.
 
 		$criteria=new CDbCriteria;
-		//$criteria->condition = 'docs_category_organization_id = :org_id';
-	        //$criteria->params = array(':org_id' => Yii::app()->user->getState('org_id'));
 		$criteria->compare('doc_category_id',$this->doc_category_id);
 		$criteria->compare('doc_category_name',$this->doc_category_name,true);
 		$criteria->compare('created_by',$this->created_by);
 		$criteria->compare('creation_date',$this->creation_date,true);
-		$criteria->compare('docs_category_organization_id',$this->docs_category_organization_id);
-
+	
 		$document = new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
-		 $_SESSION['document']=$document;
+		unset($_SESSION['exportData']);
+		$_SESSION['exportData'] = $document;
 		return $document;
 	}
+
+	/**
+	*For Export to PDF & Excel
+	*Field written in attributes are exported in excel
+	*For pdf pdfFile will be render to export
+	*/
+	public static function getExportData() {
+	      $data = array('data'=>$_SESSION['exportData'],'attributes'=>array(
+			'doc_category_name',
+			'Rel_document_user.user_organization_email_id::Created By',
+			),
+		'filename'=>'DocumentType-List', 'pdfFile'=>'/documentCategoryMaster/documentGeneratePDF');
+              return $data;
+        }
 }

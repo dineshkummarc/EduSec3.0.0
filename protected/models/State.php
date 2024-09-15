@@ -2,11 +2,7 @@
 
 /**
  * This is the model class for table "state".
- *
- * The followings are the available columns in table 'state':
- * @property integer $state_id
- * @property string $state_name
- * @property string $country_id
+ * @package EduSec.models
  */
 class State extends CActiveRecord
 {
@@ -39,7 +35,7 @@ class State extends CActiveRecord
 			array('state_name', 'length', 'max'=>60),
 			array('country_id', 'length', 'max'=>30),
 			//array('state_name', 'unique','message'=>'Already Exist.'),
-			array('state_name','CRegularExpressionValidator','pattern'=>'/^([A-Za-z  ]+)$/','message'=>''),
+			//array('state_name','CRegularExpressionValidator','pattern'=>'/^([A-Za-z  ]+)$/','message'=>''),
 			array('state_name','checkstate'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -90,74 +86,84 @@ class State extends CActiveRecord
 		$state_data =  new CActiveDataProvider(get_class($this), array(
 			'criteria'=>$criteria,
 		));
-		$_SESSION['state_data']=$state_data;
+		unset($_SESSION['exportData']);
+		$_SESSION['exportData'] = $state_data;
 		return $state_data;
 	}
-	
+
+	/**
+	*For Export to PDF & Excel
+	*Field written in attributes are exported in excel
+	*For pdf pdfFile will be render to export
+	*/	
+	public static function getExportData() {
+	      $data = array('data'=>$_SESSION['exportData'],'attributes'=>array(
+			'state_name',
+			'Rel_country.name',
+        		),
+		'filename'=>'State-List', 'pdfFile'=>'/state/StateExportPdf');
+              return $data;
+        }
+
+	/**
+	* Check state name unique in academic year 
+	* @return booleen
+	*/
 	public function checkstate()
+	{
+	   if($this->isNewRecord)
+	   {
+		$country=$this->country_id;
+		$state='"'.strtolower($this->state_name).'"';
+		$acdm_term_name=Yii::app()->db->createCommand()
+			      ->select('state_name')
+			      ->from('state')
+			      ->where('country_id="'.$country.'"'.' and state_name='.$state)
+		    	      ->queryAll();
+			
+	        if($acdm_term_name)
 		{
-			if($this->isNewRecord)
-			{
-				$country=$this->country_id;
-				$state='"'.strtolower($this->state_name).'"';
-				$acdm_term_name=Yii::app()->db->createCommand()
-					    ->select('state_name')
-					    ->from('state')
-					    ->where('country_id="'.$country.'"'.' and state_name='.$state)
-				    	    ->queryAll();
-				
-				if($acdm_term_name)
-				{
-					$this->addError('state_name',"Already Exists.");	
-					 return false;	
-				}
-				else
-				{
-					return true;
-				}
-			}
-			else
-			{
-				$state_id=$_REQUEST['id'];
-				$country=$this->country_id;
-				$state='"'.strtolower($this->state_name).'"';
-				$orgid=Yii::app()->user->getState('org_id');
-				$acdm_term_name=Yii::app()->db->createCommand()
-					     ->select('state_name')
-					    ->from('state')
-					    ->where('state_id <>'.$state_id.' and country_id="'.$country.'"'.' and state_name='.$state)
-				    	    ->queryAll();
-				
-				if($acdm_term_name)
-				  {
-				 	$this->addError('state_name',"Already Exists.");	
-					 return false;	
-				  }
-				else
-			          {
-					return true;
-				  }
-			}	
+		   $this->addError('state_name',"Already Exists.");	
+		   return false;	
 		}
+		else
+		{
+		   return true;
+		}
+	   }
+	   else
+	   {
+		$state_id=$_REQUEST['id'];
+		$country=$this->country_id;
+		$state='"'.strtolower($this->state_name).'"';
+		$orgid=Yii::app()->user->getState('org_id');
+		$acdm_term_name=Yii::app()->db->createCommand()
+			     ->select('state_name')
+			     ->from('state')
+			     ->where('state_id <>'.$state_id.' and country_id="'.$country.'"'.' and state_name='.$state)
+		    	     ->queryAll();
+		
+		if($acdm_term_name)
+		{
+		    $this->addError('state_name',"Already Exists.");	
+		    return false;	
+		}
+		else
+	        {
+		    return true;
+		}
+	  }	
+	}
+
 	private static $_items = array();
 
-    	public static function items() {
-        if (isset(self::$_items))
-            self::loadItems();
-        return self::$_items;
-    	}
-
-    	public static function item($code) {
-        if (!isset(self::$_items))
-            self::loadItems();
-        return isset(self::$_items[$code]) ? self::$_items[$code] : false;
-    	}
-
-    	private static function loadItems() {
-        self::$_items = array();
-        $models = self::model()->findAll();
-        foreach ($models as $model)
-            self::$_items[$model->state_id] = $model->state_name;
-    	}
-	
+	/**
+	* Generate array for dropdown list to use in child form.
+	* @return array $_items
+	*/
+	public static function items()
+	{
+	    self::$_items = CHtml::listData(self::model()->findAll(), 'state_id', 'state_name');
+	    return self::$_items;
+	}	
 }

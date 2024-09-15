@@ -1,6 +1,6 @@
 <?php
 
-class EmployeeDesignationController extends RController
+class EmployeeDesignationController extends EduSecCustom
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -15,32 +15,6 @@ class EmployeeDesignationController extends RController
 	{
 		return array(
 			'rights', // perform access control for CRUD operations
-		);
-	}
-
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('@'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
 		);
 	}
 
@@ -70,11 +44,9 @@ class EmployeeDesignationController extends RController
 		if(isset($_POST['EmployeeDesignation']))
 		{
 			$model->attributes=$_POST['EmployeeDesignation'];
-			$model->employee_designation_organization_id = Yii::app()->user->getState('org_id');
 			$model->employee_designation_created_by=Yii::app()->user->id;
 			$model->employee_designation_created_date=new CDbExpression('NOW()');
 			if($model->save())
-				//$this->redirect(array('view','id'=>$model->employee_designation_id));
 				$this->redirect(array('admin'));
 		}
 
@@ -114,51 +86,13 @@ class EmployeeDesignationController extends RController
 	 */
 	public function actionDelete($id)
 	{
-		if(Yii::app()->request->isPostRequest)
-		{
-			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
-
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-		}
-		else if(!Yii::app()->request->isPostRequest) {
-			$emp_tran = EmployeeTransaction::model()->findAll(array('condition'=>'employee_transaction_designation_id='.$id));
-			if(!empty($emp_tran))
-			{
-				throw new CHttpException(400,'You can not delete this record because it is used in another table.');
-			}
-			else
-			{
-				$this->loadModel($id)->delete();
-				$this->redirect( array('admin'));
-			}
-		}
-		else
-			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
-	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-		/*
-		$dataProvider=new CActiveDataProvider('EmployeeDesignation');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));
-		*/
-		$model=new EmployeeDesignation('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['EmployeeDesignation']))
-			$model->attributes=$_GET['EmployeeDesignation'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
-
+		try{
+		    $this->loadModel($id)->delete();
+		    if(!isset($_GET['ajax']))
+			    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		}catch (CDbException $e){
+			throw new CHttpException(400,'You can not delete this record because it is used in another table.');
+		}	
 	}
 
 	/**

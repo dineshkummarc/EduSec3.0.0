@@ -1,4 +1,8 @@
 <?php
+/*****************************************************************************************
+ * EduSec is a college management program developed by
+ * Rudra Softech, Inc. Copyright (C) 2013-2014.
+ ****************************************************************************************/
 
 class CourseUnitTableController extends RController
 {
@@ -19,32 +23,6 @@ class CourseUnitTableController extends RController
 	}
 
 	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
-
-	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
 	 */
@@ -59,82 +37,12 @@ class CourseUnitTableController extends RController
 
 	/**
 	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 * If creation is successful, the browser will be redirected to the 'admin' page.
 	 */
-
-	public function actionNewCreate()
-	{
-		$model=new CourseUnitTable;
-
-		$this->performAjaxValidation($model);
-		   if(isset($_POST['CourseUnitTable']))
-		   {
-			$model->attributes=$_POST['CourseUnitTable'];
-			$model->course_unit_created_by = Yii::app()->user->id;
-			$model->course_unit_creation_date = new CDbExpression('NOW()');
-			if($model->save()) {
-			  if (Yii::app()->request->isAjaxRequest)
-	                  {
-		            echo CJSON::encode(array(
-		                'status'=>'success', 
-		                //'div'=>"Classroom successfully added"
-		                ));
-		            exit;               
-		          }          
-	     	        }
-		   }
-
-		if (Yii::app()->request->isAjaxRequest)
-		{
-		    echo CJSON::encode(array(
-		        'status'=>'failure', 
-		        'div'=>$this->renderPartial('_newform', array('model'=>$model), true)));
-		    exit;               
-		}
-		else
-		    $this->render('newCreate',array('model'=>$model,));
-
-	}
-
-	public function actionNewUpdate()
-	{
-		$model=$this->loadModel($_REQUEST['id']);
-
-		$this->performAjaxValidation($model);
-		   if(isset($_POST['CourseUnitTable']))
-		   {
-			$model->attributes=$_POST['CourseUnitTable'];
-			$model->course_unit_created_by = Yii::app()->user->id;
-			$model->course_unit_creation_date = new CDbExpression('NOW()');
-			if($model->save()) {
-			  if (Yii::app()->request->isAjaxRequest)
-	                  {
-		            echo CJSON::encode(array(
-		                'status'=>'success', 
-		                //'div'=>"Classroom successfully added"
-		                ));
-		            exit;               
-		          }          
-	     	        }
-		   }
-
-		if (Yii::app()->request->isAjaxRequest)
-		{
-		    echo CJSON::encode(array(
-		        'status'=>'failure', 
-		        'div'=>$this->renderPartial('_newUpdateform', array('model'=>$model), true)));
-		    exit;               
-		}
-		else
-		    $this->render('newUpdate',array('model'=>$model,));
-
-	}
 
 	public function actionCreate()
 	{
 		$model=new CourseUnitTable;
-
-		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
 		if(isset($_POST['CourseUnitTable']))
 		{
@@ -185,14 +93,6 @@ class CourseUnitTableController extends RController
 		$unit->delete();
 		$this->redirect(array('/courseMaster/view','id'=>$master_id));
 		
-	}
-
-	public function actionMultiDel()
-	{	
-		$ids = implode(",", $_POST['chk']);
-		$sql = "DELETE FROM course_unit_table WHERE course_unit_id IN (".$ids.")";
-		$cmd = Yii::app()->db->createCommand($sql);
-		$cmd->execute();
 	}
 
 	/**

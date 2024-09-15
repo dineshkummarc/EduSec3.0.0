@@ -160,7 +160,9 @@ class EmployeeAcademicRecordTransController extends RController
 			'model'=>$model,
 		));
 	}
-
+	/**
+	* This action list the academic records of the employee.
+	*/
 	public function actionEmployeeAcademicRecords()
 	{
 		$model=new EmployeeAcademicRecordTrans('mysearch');

@@ -1,12 +1,14 @@
 <?php
+/*****************************************************************************************
+ * EduSec is a college management program developed by
+ * Rudra Softech, Inc. Copyright (C) 2013-2014.
+ ****************************************************************************************/
 
 /**
  * This is the model class for table "currency_format_table".
- *
- * The followings are the available columns in table 'currency_format_table':
- * @property integer $currency_format_id
- * @property string $currency_format
+ * @package EduSec.models
  */
+
 class CurrencyFormatTable extends CActiveRecord
 {
 	/**
@@ -32,13 +34,9 @@ class CurrencyFormatTable extends CActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('currency_format_name, currency_format', 'required' , 'message'=>''),
 			array('currency_format', 'length', 'max'=>10),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
 			array('currency_format_id, currency_format_name, currency_format', 'safe', 'on'=>'search'),
 		);
 	}

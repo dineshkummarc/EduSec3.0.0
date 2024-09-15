@@ -1,15 +1,14 @@
 <?php
+/*****************************************************************************************
+ * EduSec is a college management program developed by
+ * Rudra Softech, Inc. Copyright (C) 2013-2014.
+ ****************************************************************************************/
 
 /**
  * This is the model class for table "qualification_type".
- *
- * The followings are the available columns in table 'qualification_type':
- * @property integer $qualification_type_id
- * @property string $qualification_type_name
- * @property string $qualification_type_desc
- * @property integer $qualification_type_created_by
- * @property string $qualification_type_creation_date
+ * @package EduSec.models
  */
+
 class QualificationType extends CActiveRecord
 {
 	/**
@@ -35,15 +34,11 @@ class QualificationType extends CActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('qualification_type_name, qualification_type_desc, qualification_type_created_by, qualification_type_creation_date', 'required', 'message'=>''),
 			array('qualification_type_created_by', 'numerical', 'integerOnly'=>true),
 			array('qualification_type_name', 'length', 'max'=>100),
 			array('qualification_type_desc', 'length', 'max'=>500),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
 			array('qualification_type_id, qualification_type_name, qualification_type_desc, qualification_type_created_by, qualification_type_creation_date', 'safe', 'on'=>'search'),
 		);
 	}
@@ -53,8 +48,6 @@ class QualificationType extends CActiveRecord
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 		);
 	}

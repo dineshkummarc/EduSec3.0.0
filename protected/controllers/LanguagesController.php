@@ -1,6 +1,5 @@
 <?php
-
-class LanguagesController extends RController
+class LanguagesController extends EduSecCustom
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -18,32 +17,6 @@ class LanguagesController extends RController
 		);
 	}
 	
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('@'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
-
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -69,7 +42,6 @@ class LanguagesController extends RController
 		if(isset($_POST['Languages']))
 		{
 			$model->attributes=$_POST['Languages'];
-			$model->languages_organization_id = Yii::app()->user->getState('org_id');
 			$model->languages_created_by=Yii::app()->user->id;
 			$model->languages_created_date=new CDbExpression('NOW()');
 			if($model->save())
@@ -112,51 +84,20 @@ class LanguagesController extends RController
 	 */
 	public function actionDelete($id)
 	{
-		if(Yii::app()->request->isPostRequest)
+		$languae_known = LanguagesKnown::model()->findAll(array('condition'=>'languages_known1='.$id.' OR  languages_known2='.$id.' OR languages_known3='.$id.' OR languages_known4='.$id));
+
+		if(!empty($languae_known))
 		{
-			// we only allow deletion via POST request
+			throw new CHttpException(400,'You can not delete this record because it is used in another table.');
+		}	
+        	else
+		{	
 			$this->loadModel($id)->delete();
-
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 		}
-		else if(!Yii::app()->request->isPostRequest) {
-			$languages_known1=LanguagesKnown::model()->findAll(array('condition'=>'languages_known1='.$id));
-			$languages_known2=LanguagesKnown::model()->findAll(array('condition'=>'languages_known2='.$id));
-
-			if(!empty($languages_known1) || !empty($languages_known2))
-			{
-				throw new CHttpException(400,'You can not delete this record because it is used in another table.');
-			}
-			else
-			{
-				$this->loadModel($id)->delete();
-				$this->redirect( array('admin'));
-			}
-		}
-		else
-			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
-	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-/*		$dataProvider=new CActiveDataProvider('Languages');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		)); */
-		$model=new Languages('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Languages']))
-			$model->attributes=$_GET['Languages'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
-
+			
+		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
+		if(!isset($_GET['ajax']))
+		   $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));	
 	}
 
 	/**

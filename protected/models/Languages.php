@@ -2,13 +2,7 @@
 
 /**
  * This is the model class for table "languages".
- *
- * The followings are the available columns in table 'languages':
- * @property integer $languages_id
- * @property string $languages_name
- * @property integer $languages_organization_id
- * @property integer $languages_created_by
- * @property string $languages_created_date
+ * @package EduSec.models
  */
 class Languages extends CActiveRecord
 {
@@ -43,15 +37,15 @@ class Languages extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('languages_name, languages_created_by, languages_created_date', 'required','message'=>''),
+			array('languages_name,languages_created_by, languages_created_date', 'required','message'=>''),
 			
-			array('languages_organization_id, languages_created_by', 'numerical', 'integerOnly'=>true),
+			array('languages_created_by', 'numerical', 'integerOnly'=>true),
 			array('languages_name', 'length', 'max'=>60),
 			array('languages_name', 'unique','message'=>'Already Exists.'),
-			array('languages_name','CRegularExpressionValidator','pattern'=>'/^([A-Za-z  ]+)$/','message'=>''),
+			//array('languages_name','CRegularExpressionValidator','pattern'=>'/^([A-Za-z  ]+)$/','message'=>''),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('languages_id, languages_name, languages_organization_id, languages_created_by, languages_created_date', 'safe', 'on'=>'search'),
+			array('languages_id, languages_name, languages_created_by, languages_created_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -63,7 +57,6 @@ class Languages extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-		'Rel_org' => array(self::BELONGS_TO, 'Organization','languages_organization_id'),
 		'Rel_user' => array(self::BELONGS_TO, 'User','languages_created_by'),
 		);
 	}
@@ -76,7 +69,6 @@ class Languages extends CActiveRecord
 		return array(
 			'languages_id' => 'Languages id',
 			'languages_name' => 'Language',
-			'languages_organization_id' => 'Organization',
 			'languages_created_by' => 'Created By',
 			'languages_created_date' => 'Creation Date',
 		);
@@ -95,37 +87,40 @@ class Languages extends CActiveRecord
 
 		$criteria->compare('languages_id',$this->languages_id);
 		$criteria->compare('languages_name',$this->languages_name,true);
-		$criteria->compare('languages_organization_id',$this->languages_organization_id);
 		$criteria->compare('languages_created_by',$this->languages_created_by);
 		$criteria->compare('languages_created_date',$this->languages_created_date,true);
 
 		$language_data = new CActiveDataProvider(get_class($this), array(
 			'criteria'=>$criteria,
 		));
-		$_SESSION['language_data']=$language_data;
+		unset($_SESSION['exportData']);
+		$_SESSION['exportData'] = $language_data;
 		return $language_data;
 	}
-	private static $_items=array();
 
-        public static function items()
-        {
-            if(isset(self::$_items))
-                self::loadItems();
-            return self::$_items;
+	/**
+	*For Export to PDF & Excel
+	*Field written in attributes are exported in excel
+	*For pdf pdfFile will be render to export
+	*/
+	public static function getExportData() {
+	      $data = array('data'=>$_SESSION['exportData'],'attributes'=>array(
+			'languages_name',
+			'Rel_user.user_organization_email_id:Created By',
+        		),
+		'filename'=>'Languages-List', 'pdfFile'=>'/languages/LanguageExportPdf');
+              return $data;
         }
 
-    public static function item($code)
-    {
-        if(!isset(self::$_items))
-            self::loadItems();
-        return isset(self::$_items[$code]) ? self::$_items[$code] : false;
-    }
-
-    private static function loadItems()
-    {
-        self::$_items=array();
-        $models=self::model()->findAll();
-        foreach($models as $model)
-            self::$_items[$model->languages_id]=$model->languages_name;
-    }
+	private static $_items=array();
+	
+	/**
+	* Generate array for dropdown list to use in child form.
+	* @return array $_items
+	*/
+	public static function items()
+	{
+	    self::$_items = CHtml::listData(self::model()->findAll(), 'languages_id', 'languages_name');
+	    return self::$_items;
+	}
 }

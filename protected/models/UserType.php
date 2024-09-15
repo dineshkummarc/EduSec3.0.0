@@ -2,13 +2,7 @@
 
 /**
  * This is the model class for table "user_type".
- *
- * The followings are the available columns in table 'user_type':
- * @property integer $user_type_id
- * @property string $user_type_name
- * @property integer $created_by
- * @property string $creation_date
- * @property integer $user_type_organization_id
+ * @package EduSec.models
  */
 class UserType extends CActiveRecord
 {
@@ -38,14 +32,14 @@ class UserType extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_type_name, created_by, creation_date', 'required', 'message'=>''),
-			array('created_by, user_type_organization_id', 'numerical', 'integerOnly'=>true,'message'=>''),
+			array('user_type_name, created_by, creation_date', 'required','message'=>''),
+			array('created_by', 'numerical', 'integerOnly'=>true,'message'=>''),
 			array('user_type_name', 'length', 'max'=>30),
 			array('user_type_name', 'unique','message'=>'Already Exists.'),
-			array('user_type_name','CRegularExpressionValidator', 'pattern'=>'/^([A-Za-z  ]+)$/','message'=>''),
+			//array('user_type_name','CRegularExpressionValidator', 'pattern'=>'/^([A-Za-z  ]+)$/','message'=>''),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('user_type_id, user_type_name, created_by, creation_date, user_type_organization_id', 'safe', 'on'=>'search'),
+			array('user_type_id, user_type_name, created_by, creation_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -57,7 +51,6 @@ class UserType extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'Rel_org' => array(self::BELONGS_TO, 'Organization','user_type_organization_id'),
 			'Rel_user' => array(self::BELONGS_TO, 'User','created_by'),
 		);
 	}
@@ -91,37 +84,40 @@ class UserType extends CActiveRecord
 		$criteria->compare('user_type_name',$this->user_type_name,true);
 		$criteria->compare('created_by',$this->created_by);
 		$criteria->compare('creation_date',$this->creation_date,true);
-		$criteria->compare('user_type_organization_id',$this->user_type_organization_id);
-
+		
 		$user_type_data =new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
-		 $_SESSION['user_type_records']=$user_type_data;
+		unset($_SESSION['exportData']);
+		$_SESSION['exportData'] = $user_type_data;
 		return $user_type_data;
 	}
-		private static $_items=array();
 
-        public static function items()
-        {
-            if(isset(self::$_items))
-                self::loadItems();
-            return self::$_items;
+	/**
+	*For Export to PDF & Excel
+	*Field written in attributes are exported in excel
+	*For pdf pdfFile will be render to export
+	*/
+	public static function getExportData() {
+	      $data = array('data'=>$_SESSION['exportData'],'attributes'=>array(
+			'user_type_name', 	
+			'Rel_user.user_organization_email_id:Created By',			
+        		),
+		'filename'=>'Usertype-List', 'pdfFile'=>'/userType/userTypeGeneratePdf');
+              return $data;
         }
 
-    public static function item($code)
-    {
-        if(!isset(self::$_items))
-            self::loadItems();
-        return isset(self::$_items[$code]) ? self::$_items[$code] : false;
-    }
+	private static $_items=array();
 
-    private static function loadItems()
-    {
-        self::$_items=array();
-        $models=self::model()->findAll();
-        foreach($models as $model)
-            self::$_items[$model->user_type_id]=$model->user_type_name;
-    }
-
+	/**
+	* Generate array for dropdown list to use in child form.
+	* @return array $_items
+	*/
+	public static function items()
+	{
+	    self::$_items = CHtml::listData(self::model()->findAll(), 'user_type_id', 'user_type_name');
+	    return self::$_items;
+	} 
+        	
 
 }	

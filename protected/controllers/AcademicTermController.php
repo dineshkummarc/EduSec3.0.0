@@ -63,7 +63,10 @@ class AcademicTermController extends RController
 			'model'=>$this->loadModel($id),
 		));
 	}
-
+	public function actionReqTest($id) {
+	echo date('H:i:s');
+	Yii::app()->end();
+}
 	/**
 	 * Creates a new model.
 	 * If creation is successful, the browser will be redirected to the 'view' page.
@@ -88,18 +91,13 @@ class AcademicTermController extends RController
 		{
 			$model->attributes=$_POST['AcademicTerm'];
 			
-			$new_start = $_POST['AcademicTerm']['academic_term_start_date'];
-			$new_end = $_POST['AcademicTerm']['academic_term_end_date'];
 			
-			$start = date("Y-m-d", strtotime($new_start));
-			$end = date("Y-m-d", strtotime($new_end));
-			
-
 			$sem=$_POST['AcademicTerm']['current_sem'];
 			$model->current_sem=$sem;
-			$model->academic_term_start_date=$start;
-			$model->academic_term_end_date=$end;
-			$model->academic_term_organization_id = Yii::app()->user->getState('org_id');
+			$model->academic_term_start_date=$_POST['AcademicTerm']['academic_term_start_date'];
+			//$model->academic_term_start_date=$start;
+			$model->academic_term_end_date=$_POST['AcademicTerm']['academic_term_end_date'];
+			//$model->academic_term_organization_id = Yii::app()->user->getState('org_id');
 			if($model->save())
 				$this->redirect(array('admin'));
 				//$this->redirect(array('view','id'=>$model->academic_term_id));
@@ -121,23 +119,13 @@ class AcademicTermController extends RController
 
 		// Uncomment the following line if AJAX validation is needed
 		$this->performAjaxValidation($model);
-		$model->academic_term_start_date = date("d-m-Y", strtotime($model->academic_term_start_date));
-		$model->academic_term_end_date = date("d-m-Y", strtotime($model->academic_term_end_date));
+		
 
 		if(isset($_POST['AcademicTerm']))
 		{
 			$model->attributes=$_POST['AcademicTerm'];
 			$sem=$_POST['AcademicTerm']['current_sem'];
 
-			$new_start = $_POST['AcademicTerm']['academic_term_start_date'];
-			$new_end = $_POST['AcademicTerm']['academic_term_end_date'];
-
-			
-			$start = date("Y-m-d", strtotime($new_start));
-			$end = date("Y-m-d", strtotime($new_end));
-			
-			$model->academic_term_start_date=$start;
-			$model->academic_term_end_date=$end;
 			$model->current_sem=$sem;
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->academic_term_id));
@@ -155,31 +143,19 @@ class AcademicTermController extends RController
 	 */
 	public function actionDelete($id)
 	{
-		if(Yii::app()->request->isPostRequest)
+		$academic_term = AcademicTerm::model()->findAll(array('condition'=>'academic_term_id='.$id));
+		if(!empty($academic_term))
 		{
-			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
-
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-		}
-		else if(!Yii::app()->request->isPostRequest) {
-			$stud_tran = StudentTransaction::model()->findAll(array('condition'=>'student_academic_term_name_id='.$id));
-			
-			if(!empty($stud_tran))
-			{
+			try{
+			    $this->loadModel($id)->delete();
+			    if(!isset($_GET['ajax']))
+				    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+			    }catch (CDbException $e){
 				throw new CHttpException(400,'You can not delete this record because it is used in another table.');
-			}
-			else
-			{
-				$this->loadModel($id)->delete();
-				$this->redirect( array('admin'));
-			}
+			    }
 		}
 		else
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
-
 	}
 
 	/**

@@ -1,20 +1,14 @@
 <?php
+/*****************************************************************************************
+ * EduSec is a college management program developed by
+ * Rudra Softech, Inc. Copyright (C) 2013-2014.
+ ****************************************************************************************/
 
 /**
  * This is the model class for table "course_master".
- *
- * The followings are the available columns in table 'course_master':
- * @property integer $course_master_id
- * @property string $course_name
- * @property integer $course_category_id
- * @property integer $course_level
- * @property integer $course_completion_hours
- * @property string $course_code
- * @property integer $course_cost
- * @property string $course_desc
- * @property integer $course_created_by
- * @property string $course_creation_date
+ * @package EduSec.models
  */
+
 class CourseMaster extends CActiveRecord
 {
 	/**
@@ -40,37 +34,38 @@ class CourseMaster extends CActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('course_name, course_category_id, course_level, course_completion_hours, course_code, course_cost, course_desc, course_created_by, course_creation_date', 'required', 'message'=>''),
 			array('course_category_id, course_level, course_completion_hours, course_cost, course_created_by', 'numerical', 'integerOnly'=>true),
 			array('course_name', 'length', 'max'=>100),
 			array('course_code', 'length', 'max'=>25),
 			array('course_desc', 'length', 'max'=>10000),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
 			array('course_master_id, course_name, course_category_id, course_level, course_completion_hours, course_code, course_cost, course_desc, course_created_by, course_creation_date', 'safe', 'on'=>'search'),
 		);
 	}
 
+	/**
+	 * set primary key table
+	 */
 	public function primaryKey()
 	{
 	    return 'course_master_id';
 	}
 
+	/**
+	 * @return contacted value. Course cost concate with currency format.
+	 */
 	public function getConcated()
 	{
 	      $fmt = CurrencyFormatTable::model()->findAll();
 	      return $this->course_cost." ".$fmt[0]['currency_format'];
 	}
+
 	/**
 	 * @return array relational rules.
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'relCat'=>array(self::BELONGS_TO, 'QualificationType', 'course_category_id'),
 			'Rel_user'=>array(self::BELONGS_TO, 'User', 'course_created_by'),

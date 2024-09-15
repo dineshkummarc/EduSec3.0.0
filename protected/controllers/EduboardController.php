@@ -1,6 +1,6 @@
 <?php
 
-class EduboardController extends RController
+class EduboardController extends EduSecCustom
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -18,32 +18,6 @@ class EduboardController extends RController
 		);
 	}
 	
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('@'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
-
 	/**
 	 * Displays a particular model.
 	 * @param integer $id the ID of the model to be displayed
@@ -69,7 +43,6 @@ class EduboardController extends RController
 		if(isset($_POST['Eduboard']))
 		{
 			$model->attributes=$_POST['Eduboard'];
-			$model->eduboard_organization_id=yii::app()->user->getState('org_id');
 			$model->eduboard_created_by=Yii::app()->user->id;
 			$model->for_whom=1;
 			$model->eduboard_created_date=new CDbExpression('NOW()');
@@ -114,51 +87,15 @@ class EduboardController extends RController
 	 */
 	public function actionDelete($id)
 	{
-		if(Yii::app()->request->isPostRequest)
-		{
-			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
-
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
-		}
-		else if(!Yii::app()->request->isPostRequest) {
-			$emp_academic_record = EmployeeAcademicRecordTrans::model()->findAll(array('condition'=>'employee_academic_record_trans_eduboard_id='.$id));
-			$stud_academic_record = StudentAcademicRecordTrans::model()->findAll(array('condition'=>'student_academic_record_trans_eduboard_id='.$id));
-			if(!empty($emp_academic_record) || !empty($stud_academic_record))
-			{
-				throw new CHttpException(400,'You can not delete this record because it is used in another table.');
-			}
-			else
-			{
-				$this->loadModel($id)->delete();
-				$this->redirect( array('admin'));
-			}
-		}
-		else
-			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
+		try{
+		    $this->loadModel($id)->delete();
+		    if(!isset($_GET['ajax']))
+			    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		}catch (CDbException $e){
+			throw new CHttpException(400,'You can not delete this record because it is used in another table.');
+		}	
 	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-/*		$dataProvider=new CActiveDataProvider('Eduboard');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));*/
-		$model=new Eduboard('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Eduboard']))
-			$model->attributes=$_GET['Eduboard'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
-	}
-
+	
 	/**
 	 * Manages all models.
 	 */

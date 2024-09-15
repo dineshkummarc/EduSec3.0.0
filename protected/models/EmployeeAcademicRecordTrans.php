@@ -48,8 +48,9 @@ class EmployeeAcademicRecordTrans extends CActiveRecord
 			array('employee_academic_record_trans_user_id, employee_academic_record_trans_qualification_id, employee_academic_record_trans_eduboard_id, employee_academic_record_trans_year_id, theory_mark_obtained, theory_mark_max, theory_percentage', 'required','message'=>""),
 			array('employee_academic_record_trans_user_id, employee_academic_record_trans_qualification_id, employee_academic_record_trans_eduboard_id, employee_academic_record_trans_year_id, theory_mark_obtained, theory_mark_max, practical_mark_obtained, practical_mark_max,	employee_academic_record_trans_oraganization_id', 'numerical', 'integerOnly'=>true,'message'=>""),
 			array('theory_percentage, practical_percentage', 'numerical'),
-
-			array('theory_mark_max','checkMarks','message'=>'Obtained Marks Can Not Be Greater Than Max Marks'),
+			array('theory_mark_obtained','compare','compareAttribute'=>'theory_mark_max','operator'=>'>','message'=>'Theory Marks Obtained must be less than max marks'),
+			array('practical_mark_obtained','compare','compareAttribute'=>'practical_mark_max','operator'=>'>','message'=>'Practical Marks Obtained must be less than max marks'),
+			//array('theory_mark_max','checkMarks','message'=>'Obtained Marks Can Not Be Greater Than Max Marks'),
 			array('theory_percentage','checkpercentage','message'=>'Percentage Always Less Than 100'),
 			array('theory_mark_obtained, theory_mark_max, practical_mark_obtained, practical_mark_max','CRegularExpressionValidator','pattern'=>'/^([0-9]+)$/','message'=>''),
 
@@ -91,7 +92,7 @@ class EmployeeAcademicRecordTrans extends CActiveRecord
 
 		);
 	}
-	public function checkMarks($attribute,$params)
+	/*public function checkMarks($attribute,$params)
 	{
 	    	if(($this->theory_mark_obtained > $this->theory_mark_max) || ($this->practical_mark_obtained > $this->practical_mark_max))
 		{
@@ -105,8 +106,8 @@ class EmployeeAcademicRecordTrans extends CActiveRecord
 			else
 				$this->addError('practical_mark_obtained','Obtained Marks Always Less Than Max Mark');
 		}	
-	}
-	public function checkpercentage($attribute,$params)
+	}*/
+/*	public function checkpercentage($attribute,$params)
 	{
 		if(($this->theory_percentage > 100) || ($this->practical_percentage > 100))
 		{
@@ -120,7 +121,7 @@ class EmployeeAcademicRecordTrans extends CActiveRecord
 			else
 				$this->addError('practical_percentage','Percentage Always Less Than 100');
 		}	
-	}
+	}*/
 
 	/**
 	 * @return array customized attribute labels (name=>label)
@@ -202,7 +203,7 @@ class EmployeeAcademicRecordTrans extends CActiveRecord
 		return $data;
 	}
 
-	public function beforesave()
+	/*public function beforesave()
 	{
 		if(($this->theory_mark_obtained > $this->theory_mark_max) || ($this->practical_mark_obtained > $this->practical_mark_max))
 		{
@@ -224,6 +225,6 @@ class EmployeeAcademicRecordTrans extends CActiveRecord
 		}	
 		
 
-	}
+	}*/
 
 }

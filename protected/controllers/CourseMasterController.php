@@ -1,4 +1,8 @@
 <?php
+/*****************************************************************************************
+ * EduSec is a college management program developed by
+ * Rudra Softech, Inc. Copyright (C) 2013-2014.
+ ****************************************************************************************/
 
 class CourseMasterController extends RController
 {
@@ -19,34 +23,8 @@ class CourseMasterController extends RController
 	}
 
 	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
-
-	/**
 	 * Displays a particular model.
-	 * @param integer $id the ID of the model to be displayed
+	 * With course unit details.
 	 */
 	public function actionView()
 	{
@@ -59,77 +37,8 @@ class CourseMasterController extends RController
 
 	/**
 	 * Creates a new model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 * If creation is successful, the browser will be redirected to the 'admin' page.
 	 */
-
-	public function actionNewCreate()
-	{
-		$model=new CourseMaster;
-
-		$this->performAjaxValidation($model);
-		   if(isset($_POST['CourseMaster']))
-		   {
-			$model->attributes=$_POST['CourseMaster'];
-			$model->course_created_by = Yii::app()->user->id;
-			$model->course_creation_date = new CDbExpression('NOW()');
-			if($model->save()) {
-			  if (Yii::app()->request->isAjaxRequest)
-	                  {
-		            echo CJSON::encode(array(
-		                'status'=>'success', 
-		                //'div'=>"Classroom successfully added"
-		                ));
-		            exit;               
-		          }          
-	     	        }
-		   }
-
-		if (Yii::app()->request->isAjaxRequest)
-		{
-		    echo CJSON::encode(array(
-		        'status'=>'failure', 
-		        'div'=>$this->renderPartial('_newform', array('model'=>$model), true)));
-		    exit;               
-		}
-		else
-		    $this->render('newCreate',array('model'=>$model,));
-
-	}
-
-	public function actionNewUpdate()
-	{
-		$model=$this->loadModel($_REQUEST['id']);
-
-		$this->performAjaxValidation($model);
-		   if(isset($_POST['CourseMaster']))
-		   {
-			$model->attributes=$_POST['CourseMaster'];
-			$model->course_created_by = Yii::app()->user->id;
-			$model->course_creation_date = new CDbExpression('NOW()');
-			if($model->save()) {
-			  if (Yii::app()->request->isAjaxRequest)
-	                  {
-		            echo CJSON::encode(array(
-		                'status'=>'success', 
-		                //'div'=>"Classroom successfully added"
-		                ));
-		            exit;               
-		          }          
-	     	        }
-		   }
-
-		if (Yii::app()->request->isAjaxRequest)
-		{
-		    echo CJSON::encode(array(
-		        'status'=>'failure', 
-		        'div'=>$this->renderPartial('_newUpdateform', array('model'=>$model), true)));
-		    exit;               
-		}
-		else
-		    $this->render('newUpdate',array('model'=>$model,));
-
-	}
-
 	public function actionCreate()
 	{
 		$model=new CourseMaster;
@@ -148,8 +57,6 @@ class CourseMasterController extends RController
 		$this->render('create',array(
 			'model'=>$model,
 		));
-
-		
 	}
 
 	/**
@@ -160,9 +67,7 @@ class CourseMasterController extends RController
 	public function actionUpdate($id)
 	{
 		$model=$this->loadModel($id);
-
-		// Uncomment the following line if AJAX validation is needed
-		 $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['CourseMaster']))
 		{
@@ -185,10 +90,8 @@ class CourseMasterController extends RController
 	{
 		if(Yii::app()->request->isPostRequest)
 		{
-			// we only allow deletion via POST request
 			$this->loadModel($id)->delete();
 
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 			if(!isset($_GET['ajax']))
 				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 		}
@@ -211,14 +114,6 @@ class CourseMasterController extends RController
 			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
 		}
 
-	public function actionMultiDel()
-	{	
-		$ids = implode(",", $_POST['chk']);
-		$sql = "DELETE FROM course_master WHERE course_master_id IN (".$ids.")";
-		$cmd = Yii::app()->db->createCommand($sql);
-		$cmd->execute();
-	}
-
 	/**
 	 * Lists all models.
 	 */
@@ -233,7 +128,6 @@ class CourseMasterController extends RController
 			'model'=>$model,
 		));
 	}
-	
 
 	/**
 	 * Manages all models.

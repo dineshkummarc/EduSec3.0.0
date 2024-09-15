@@ -1,4 +1,8 @@
 <?php
+/*****************************************************************************************
+ * EduSec is a college management program developed by
+ * Rudra Softech, Inc. Copyright (C) 2013-2014.
+ ****************************************************************************************/
 
 class StudentPaidFeesDetailsController extends RController
 {
@@ -18,31 +22,6 @@ class StudentPaidFeesDetailsController extends RController
 		);
 	}
 
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	 
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('admin'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
-		);
-	}
 
 	/**
 	 * Displays a particular model.
@@ -66,9 +45,7 @@ class StudentPaidFeesDetailsController extends RController
 		$cDetails = CourseMaster::model()->findByPk($course);
 		
 		$model=new StudentPaidFeesDetails;
-
-		// Uncomment the following line if AJAX validation is needed
-		 $this->performAjaxValidation($model);
+		$this->performAjaxValidation($model);
 
 		if(isset($_POST['StudentPaidFeesDetails']))
 		{
@@ -86,6 +63,9 @@ class StudentPaidFeesDetailsController extends RController
 		));
 	}
 
+	/**
+	 * Display student list grid to select student to take a fees.
+	 */
 	public function actionTakeFees()
 	{
 		$model = new StudentTransaction('search');
@@ -132,10 +112,7 @@ class StudentPaidFeesDetailsController extends RController
 	{
 		if(Yii::app()->request->isPostRequest)
 		{
-			// we only allow deletion via POST request
 			$this->loadModel($id)->delete();
-
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 			if(!isset($_GET['ajax']))
 				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
 		}

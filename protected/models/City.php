@@ -2,12 +2,7 @@
 
 /**
  * This is the model class for table "city".
- *
- * The followings are the available columns in table 'city':
- * @property integer $city_id
- * @property string $city_name
- * @property integer $country_id
- * @property integer $state_id
+ * @package EduSec.models
  */
 class City extends CActiveRecord
 {
@@ -44,8 +39,7 @@ class City extends CActiveRecord
 			array('city_name, country_id, state_id', 'required','message'=>''),
 			array('city_id, country_id, state_id', 'numerical', 'integerOnly'=>true,'message'=>''),
 			array('city_name', 'length', 'max'=>60),
-			//array('city_name', 'unique','message'=>'Already Exist.'),
-			array('city_name','CRegularExpressionValidator','pattern'=>'/^([A-Za-z  ]+)$/','message'=>''),
+			//array('city_name','CRegularExpressionValidator','pattern'=>'/^([A-Za-z  ]+)$/','message'=>''),
 			array('city_name','checkcity'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -100,54 +94,74 @@ class City extends CActiveRecord
 		$city_data = new CActiveDataProvider(get_class($this), array(
 			'criteria'=>$criteria,
 		));
-		$_SESSION['city_data']=$city_data;
+		unset($_SESSION['exportData']);
+		$_SESSION['exportData']=$city_data;
 		return $city_data;
 	}
 	
+	/**
+	*For Export to PDF & Excel
+	*Field written in attributes are exported in excel
+	*For pdf pdfFile will be render to export
+	*/
+        public static function getExportData() {
+	      $data = array('data'=>$_SESSION['exportData'],'attributes'=>array(
+			'city_name',
+			'Rel_state.state_name',
+			'Rel_country.name',			
+        		),
+		'filename'=>'City', 'pdfFile'=>'/city/CityExportPdf');
+              return $data;
+        }
+
+	/**
+	* Check city name must be unique in same state.
+	* @return boolean
+	*/	
 	public function checkcity()
+	{
+		if($this->isNewRecord)
 		{
-			if($this->isNewRecord)
-			{
-				$state=$this->state_id;
-				$city='"'.strtolower($this->city_name).'"';
-				$acdm_term_name=Yii::app()->db->createCommand()
-					    ->select('city_name')
-					    ->from('city')
-					    ->where('state_id="'.$state.'"'.' and city_name='.$city)
-				    	    ->queryAll();
+			$state=$this->state_id;
+			$city='"'.strtolower($this->city_name).'"';
+			$acdm_term_name=Yii::app()->db->createCommand()
+				    ->select('city_name')
+				    ->from('city')
+				    ->where('state_id="'.$state.'"'.' and city_name='.$city)
+			    	    ->queryAll();
 				
-				if($acdm_term_name)
-				{
-					$this->addError('city_name',"Already Exists.");	
-					 return false;	
-				}
-				else
-				{
-					return true;
-				}
+			if($acdm_term_name)
+			{
+				$this->addError('city_name',"Already Exists.");	
+				 return false;	
 			}
 			else
 			{
-				$city_id=$_REQUEST['id'];
-				$state=$this->state_id;
-				$city='"'.strtolower($this->city_name).'"';
-				$acdm_term_name=Yii::app()->db->createCommand()
-					     ->select('city_name')
-					    ->from('city')
-					    ->where('city_id <>'.$city_id.' and state_id="'.$state.'"'.' and city_name='.$city)
-				    	    ->queryAll();
-				
-				if($acdm_term_name)
-				  {
-				 	$this->addError('city_name',"Already Exists.");	
-					 return false;	
-				  }
-				else
-			          {
-					return true;
-				  }
-			}	
+				return true;
+			}
 		}
+		else
+		{
+			$city_id=$_REQUEST['id'];
+			$state=$this->state_id;
+			$city='"'.strtolower($this->city_name).'"';
+			$acdm_term_name=Yii::app()->db->createCommand()
+				     ->select('city_name')
+				     ->from('city')
+				     ->where('city_id <>'.$city_id.' and state_id="'.$state.'"'.' and city_name='.$city)
+				     ->queryAll();
+				
+			if($acdm_term_name)
+			  {
+			 	$this->addError('city_name',"Already Exists.");	
+				 return false;	
+			  }
+			else
+		          {
+				return true;
+			  }
+		}	
+	}
 	private static $_items=array();
 
         public static function items()

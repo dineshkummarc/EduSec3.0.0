@@ -1,6 +1,6 @@
 <?php
 
-class QualificationController extends RController
+class QualificationController extends EduSecCustom
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -15,33 +15,6 @@ class QualificationController extends RController
 	{
 		return array(
 			'rights',// perform access control for CRUD operations
-		);
-	}
-
-	
-	/**
-	 * Specifies the access control rules.
-	 * This method is used by the 'accessControl' filter.
-	 * @return array access control rules
-	
-	public function accessRules()
-	{
-		return array(
-			array('allow',  // allow all users to perform 'index' and 'view' actions
-				'actions'=>array('index','view'),
-				'users'=>array('*'),
-			),
-			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('create','update'),
-				'users'=>array('@'),
-			),
-			array('allow', // allow admin user to perform 'admin' and 'delete' actions
-				'actions'=>array('admin','delete'),
-				'users'=>array('@'),
-			),
-			array('deny',  // deny all users
-				'users'=>array('*'),
-			),
 		);
 	}
 
@@ -70,7 +43,6 @@ class QualificationController extends RController
 		if(isset($_POST['Qualification']))
 		{
 			$model->attributes=$_POST['Qualification'];
-			$model->qualification_organization_id=yii::app()->user->getState('org_id');
 			$model->qualification_created_by=Yii::app()->user->id;
 			$model->qualification_created_date=new CDbExpression('NOW()');
 			if($model->save())
@@ -114,51 +86,15 @@ class QualificationController extends RController
 	 */
 	public function actionDelete($id)
 	{
-		if(Yii::app()->request->isPostRequest)
-		{
-			// we only allow deletion via POST request
-			$this->loadModel($id)->delete();
-
-			// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
-			if(!isset($_GET['ajax']))
-				$this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		try{
+		    $this->loadModel($id)->delete();
+		    if(!isset($_GET['ajax']))
+			    $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+		}catch (CDbException $e){
+			throw new CHttpException(400,'You can not delete this record because it is used in another table.');
 		}
-		else if(!Yii::app()->request->isPostRequest) {
-			$emp_academic_record = EmployeeAcademicRecordTrans::model()->findAll(array('condition'=>'employee_academic_record_trans_qualification_id='.$id));
-			$stud_academic_record = StudentAcademicRecordTrans::model()->findAll(array('condition'=>'student_academic_record_trans_qualification_id='.$id));
-			if(!empty($emp_academic_record) || !empty($stud_academic_record))
-			{
-				throw new CHttpException(400,'You can not delete this record because it is used in another table.');
-			}
-			else
-			{
-				$this->loadModel($id)->delete();
-				$this->redirect( array('admin'));
-			}
-		}
-		else
-			throw new CHttpException(400,'Invalid request. Please do not repeat this request again.');
 	}
-
-	/**
-	 * Lists all models.
-	 */
-	public function actionIndex()
-	{
-/*		$dataProvider=new CActiveDataProvider('Qualification');
-		$this->render('index',array(
-			'dataProvider'=>$dataProvider,
-		));*/
-		$model=new Qualification('search');
-		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Qualification']))
-			$model->attributes=$_GET['Qualification'];
-
-		$this->render('admin',array(
-			'model'=>$model,
-		));
-	}
-
+	
 	/**
 	 * Manages all models.
 	 */

@@ -2,25 +2,7 @@
 
 /**
  * This is the model class for table "organization".
- *
- * The followings are the available columns in table 'organization':
- * @property integer $organization_id
- * @property string $organization_name
- * @property integer $organization_created_by
- * @property string $organization_creation_date
-
- * @property string address_line1
- * @property string address_line2 
- * @property string city
- * @property string state
-* @property string  country
-* @property string pin
-* @property string phone
-* @property string website
-* @property string email
-* @property string taxno
-* @property string logo
-
+ * @package EduSec.models
  */
 class Organization extends CActiveRecord
 {
@@ -57,20 +39,23 @@ class Organization extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('organization_name, organization_created_by, organization_creation_date, country, phone, email','required','message'=>''),
-			array('organization_created_by, organization_trust_id', 'numerical', 'integerOnly'=>true , 'message'=>''),
-			array('organization_name, organization_name,address_line1,fax_no,address_line2', 'length', 'max'=>50, 'message'=>''),
+			array('organization_name, organization_created_by,name_alias, organization_creation_date', 'required', 'message'=>''),
+			array('organization_created_by,pin', 'numerical', 'integerOnly'=>true , 'message'=>''),
+			array('organization_name, organization_name,address_line1,fax_no,address_line2', 'length', 'max'=>100, 'message'=>''),
+			array('city,state,country, address_line1,pin, phone, email','safe'),
 			array('fax_no', 'length', 'max'=>15, 'message'=>''),
-			//array('organization_name','required','message'=>'','on'=>'update'),
 			array('logo', 'file', 
        				 'types'=>'jpg, gif, png, bmp, jpeg',
             			'maxSize'=>1024 * 1024 * 2, // 10MB
                 		'tooLarge'=>'The file was larger than 2MB. Please upload a smaller file.',
             			'allowEmpty' => true),
-
-			array('email', 'email','message'=>''),
-
-			array('phone','CRegularExpressionValidator','pattern'=>'/^[0-9+ ]+([-][0-9+ ]+)*$/'),
+			array('organization_name','unique','message'=>'Already Exist'),
+			//array('email','CRegularExpressionValidator','pattern'=>'/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]+)$/','message'=>''),
+			array('website','url', 'message'=>''),
+			array('organization_name','CRegularExpressionValidator','pattern'=>'/^[a-zA-Z.& ]+([-][a-zA-Z ]+)*$/','message'=>''),
+			// array('email', 'ext.Email'),
+			 array('Website,organization_trust_id','safe'),
+			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('organization_id, organization_name, organization_created_by,name_alias, organization_creation_date, address_line1, address_line2, pin, phone, Website, email, city_name, state_name, name,fax_no,organization_trust_id','safe', 'on'=>'search'),
 		);
@@ -99,21 +84,19 @@ class Organization extends CActiveRecord
 		return array(
 			'organization_id' => 'ID',
 			'organization_name' => 'Name ',
-			'name_alias'=>'Name Alias',
+			'name_alias'=>'Alias',
 			'organization_created_by' => 'Created By',
 			'organization_creation_date' => 'Creation Date',
 			'address_line1'=>'Address Line1',
 			'address_line2'=>'Address Line2',
-			'pin'=>'Zip / Postal Code',
+			'pin'=>'Pin',
 			'phone'=>'Phone',
 			'website'=>'website',
 			'email'=>'Email',
 			'fax_no'=>'Fax No',
-			'city'=>'City / Town',
-			'state'=>'State / Province',
+			'city'=>'City',
+			'state'=>'State',
 			'country'=>'Country',
-			'name'=>'Country',
-			'organization_trust_id'=>'Trust',
 		);
 	}
 
@@ -128,99 +111,49 @@ class Organization extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		//$criteria->with = array('Rel_org_city','Rel_org_state','Rel_org_country');  /// Note: Define relation with related table....
-
-		//$criteria->compare('Rel_org_city.city_name',$this->city_name,true);  // Note: Compare related table field with relation....
-		//$criteria->compare('Rel_org_state.state_name',$this->state_name,true);  // Note: Compare related table field with relation....
-		//$criteria->compare('Rel_org_country.name',$this->name,true);  // Note: Compare related table field with relation....
-
-		$criteria->compare('organization_id',$this->organization_id);
-		$criteria->compare('organization_name',$this->organization_name,true);
-		
-		$criteria->compare('organization_created_by',$this->organization_created_by);
-		$criteria->compare('organization_creation_date',$this->organization_creation_date,true);
-		$criteria->compare('address_line1',$this->address_line1,true);
-		$criteria->compare('address_line2',$this->address_line2);
-		$criteria->compare('pin',$this->pin);
-		$criteria->compare('phone',$this->phone);	
-		$criteria->compare('website',$this->website,true);
-		$criteria->compare('email',$this->email);
-		$criteria->compare('fax_no',$this->fax_no);
-		$criteria->compare('city',$this->city);
-		$criteria->compare('state',$this->state);		
-		$criteria->compare('country',$this->country);
-		$criteria->compare('organization_trust_id',$this->organization_trust_id);
 		$organization_data = new CActiveDataProvider(get_class($this), array(
 			'criteria'=>$criteria,
 		));
 	
-		$_SESSION['organization_records']=$organization_data;
+		unset($_SESSION['exportData']);
+		$_SESSION['exportData'] = $organization_data;
 		return $organization_data;
-		}
-	private static $_items=array();
+	}
 
-        public static function items()
-        {
-            if(isset(self::$_items))
-                self::loadItems();
-            return self::$_items;
+	/**
+	*For Export to PDF & Excel
+	*Field written in attributes are exported in excel
+	*For pdf pdfFile will be render to export
+	*/
+	public static function getExportData() {
+	      $data = array('data'=>$_SESSION['exportData'],'attributes'=>array(
+		'organization_name',
+		'address_line1',
+		'Rel_org_city.city_name',
+		'Rel_org_state.state_name',
+		'Rel_org_country.name',
+		'pin',
+		'phone',
+		'website',
+		'email',
+		'fax_no',
+		'Rel_user.user_organization_email_id',
+		'organization_creation_date',
+	
+        		),
+		'filename'=>'Organization-List', 'pdfFile'=>'/organization/OrganizationGeneratePDF');
+              return $data;
         }
 
-    public static function item($code)
-    {
-        if(!isset(self::$_items))
-            self::loadItems();
-        return isset(self::$_items[$code]) ? self::$_items[$code] : false;
-    }
+	private static $_items=array();
 
-    private static function loadItems()
-    {
-        self::$_items=array();
-        $models=self::model()->findAll();
-        foreach($models as $model)
-            self::$_items[$model->organization_id]=$model->organization_name;
-    }
-	public function checkorg()
-		{
-			if($this->isNewRecord)
-			{
-				$orgname='"'.strtolower($this->organization_name).'"';
-				$organization_name=Yii::app()->db->createCommand()
-					    ->select('organization_name')
-					    ->from('organization')
-					    ->where('organization_name='.$orgname)
-				    	    ->queryAll();
-				
-				if($organization_name)
-				{
-					$this->addError('organization_name',"Already Exists.");	
-					 return false;	
-				}
-				else
-				{
-					return true;
-				}
-			}
-			else
-			{	
-				$orgid=$_REQUEST['id'];
-				$orgname='"'.strtolower($this->organization_name).'"';
-				$organization_name=Yii::app()->db->createCommand()
-					    ->select('organization_name')
-					    ->from('organization')
-					    ->where('organization_id <>'.$orgid.' and organization_name='.$orgname)
-				    	    ->queryAll();
-				
-				if($organization_name)
-				  {
-				 	$this->addError('organization_name',"Already Exists.");	
-					 return false;	
-				  }
-				else
-			          {
-					return true;
-				  }
-			}	
-		}
-
+       /**
+	* Generate array for dropdown list to use in child form.
+	* @return array $_items
+	*/
+	public static function items()
+	{
+	    self::$_items = CHtml::listData(self::model()->findAll(), 'organization_id', 'organization_name');
+	    return self::$_items;
+	}
 }

@@ -1,16 +1,14 @@
 <?php
+/*****************************************************************************************
+ * EduSec is a college management program developed by
+ * Rudra Softech, Inc. Copyright (C) 2013-2014.
+ ****************************************************************************************/
 
 /**
  * This is the model class for table "student_paid_fees_details".
- *
- * The followings are the available columns in table 'student_paid_fees_details':
- * @property integer $student_paid_fees_id
- * @property integer $student_paid_student_id
- * @property integer $student_paid_course_id
- * @property integer $student_paid_amount
- * @property string $student_paid_date
- * @property integer $student_paid_to
+ * @package EduSec.models
  */
+
 class StudentPaidFeesDetails extends CActiveRecord
 {
 	/**
@@ -32,6 +30,9 @@ class StudentPaidFeesDetails extends CActiveRecord
 		return 'student_paid_fees_details';
 	}
 
+	/**
+	 * @return student paid amount with currency format.
+	 */
 	public function getConcated()
 	{
 	      $fmt = CurrencyFormatTable::model()->findAll();
@@ -43,13 +44,9 @@ class StudentPaidFeesDetails extends CActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('student_paid_student_id, student_paid_course_id, student_paid_amount, student_paid_date, student_paid_to', 'required', 'message'=>''),
 			array('student_paid_student_id, student_paid_course_id, student_paid_amount, student_paid_to', 'numerical', 'integerOnly'=>true),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
 			array('student_paid_fees_id, student_paid_student_id, student_paid_course_id, student_paid_amount, student_paid_date, student_paid_to, student_first_name', 'safe', 'on'=>'search'),
 		);
 	}
@@ -59,8 +56,6 @@ class StudentPaidFeesDetails extends CActiveRecord
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 		  'relCourse' => array(self::BELONGS_TO, 'CourseMaster', 'student_paid_course_id'),
 		  'relStudent' => array(self::BELONGS_TO, 'StudentInfo','', 'on' => 'student_paid_student_id=student_info_transaction_id'),
@@ -88,8 +83,6 @@ class StudentPaidFeesDetails extends CActiveRecord
 	 */
 	public function search()
 	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
 
 		$criteria=new CDbCriteria;
 		$criteria->with = array('relStudent');
@@ -107,11 +100,11 @@ class StudentPaidFeesDetails extends CActiveRecord
 		));
 	}
 
+	/**
+	 * @return student paid fees details info.
+	 */
 	public function studPaidFees()
 	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
-
 		$criteria=new CDbCriteria;
 		$criteria->condition = 'student_paid_student_id = :stud_id';
 	        $criteria->params = array(':stud_id' => $_REQUEST['id']);

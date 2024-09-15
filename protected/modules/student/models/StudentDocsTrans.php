@@ -2,12 +2,9 @@
 
 /**
  * This is the model class for table "student_docs_trans".
- *
- * The followings are the available columns in table 'student_docs_trans':
- * @property integer $student_docs_trans_id
- * @property string $student_docs_trans_user_id
- * @property string $student_docs_trans_stud_docs_id
+ * @package EduSec.models
  */
+
 class StudentDocsTrans extends CActiveRecord
 {
 	/**
@@ -33,13 +30,9 @@ class StudentDocsTrans extends CActiveRecord
 	 */
 	public function rules()
 	{
-		// NOTE: you should only define rules for those attributes that
-		// will receive user inputs.
 		return array(
 			array('student_docs_trans_user_id, student_docs_trans_stud_docs_id', 'required','message'=>''),
 			array('student_docs_trans_user_id, student_docs_trans_stud_docs_id', 'numerical', 'integerOnly'=>true),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
 			array('student_docs_trans_id, student_docs_trans_user_id, student_docs_trans_stud_docs_id', 'safe', 'on'=>'search'),
 		);
 	}
@@ -49,8 +42,6 @@ class StudentDocsTrans extends CActiveRecord
 	 */
 	public function relations()
 	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
 		return array(
 			'Rel_Stud_doc' => array(self::BELONGS_TO, 'StudentDocs', 'student_docs_trans_stud_docs_id'),
 		);
@@ -88,6 +79,9 @@ class StudentDocsTrans extends CActiveRecord
 		));
 	}
 
+	/**
+	** Retrive list of document related to particuler Student.
+	*/
 	public function mysearch()
 	{
 		// Warning: Please modify the following code to remove attributes that

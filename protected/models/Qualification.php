@@ -2,13 +2,7 @@
 
 /**
  * This is the model class for table "qualification".
- *
- * The followings are the available columns in table 'qualification':
- * @property integer $qualification_id
- * @property string $qualification_name
- * @property integer $qualification_organization_id
- * @property integer $qualification_created_by
- * @property string $qualification_created_date
+ * @package EduSec.models
  */
 class Qualification extends CActiveRecord
 {
@@ -28,6 +22,10 @@ class Qualification extends CActiveRecord
 	{
 		return 'qualification';
 	}
+
+	/**
+	 * Set default scope for display record orderby as below.
+	 */
 	public function defaultScope() 
 	{
        		return array(
@@ -43,14 +41,13 @@ class Qualification extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('qualification_name, qualification_created_by, qualification_created_date', 'required','message'=>''),
-			array('qualification_organization_id, qualification_created_by', 'numerical', 'integerOnly'=>true),
+			array('qualification_created_by', 'numerical', 'integerOnly'=>true),
 			array('qualification_name', 'length', 'max'=>30),
 			array('qualification_name', 'unique','message'=>'Already Exists.'),
-			//array('qualification_name','CRegularExpressionValidator','pattern'=>'/^([A-Za-z&-.\/_  ]+)$/','message'=>''),
-array('qualification_name','CRegularExpressionValidator','pattern'=>'/^[a-zA-Z\/]+([-. ][a-zA-Z. \/]+)*$/','message'=>''),
+			//array('qualification_name','CRegularExpressionValidator','pattern'=>'/^[a-zA-Z\/]+([-. ][a-zA-Z. \/]+)*$/','message'=>''),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('qualification_id, qualification_name, qualification_organization_id, qualification_created_by, qualification_created_date', 'safe', 'on'=>'search'),
+			array('qualification_id, qualification_name,qualification_created_by, qualification_created_date', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -62,7 +59,6 @@ array('qualification_name','CRegularExpressionValidator','pattern'=>'/^[a-zA-Z\/
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-		'Rel_org' => array(self::BELONGS_TO, 'Organization','qualification_organization_id'),
 		'Rel_user' => array(self::BELONGS_TO, 'User','qualification_created_by'),
 		);
 	}
@@ -74,8 +70,7 @@ array('qualification_name','CRegularExpressionValidator','pattern'=>'/^[a-zA-Z\/
 	{
 		return array(
 			'qualification_id' => 'Qualification id',
-			'qualification_name' => 'Qualification',
-			'qualification_organization_id' => 'Organization',
+			'qualification_name' => 'Qualification Name',
 			'qualification_created_by' => 'Created By',
 			'qualification_created_date' => 'Creation Date',
 		);
@@ -94,37 +89,40 @@ array('qualification_name','CRegularExpressionValidator','pattern'=>'/^[a-zA-Z\/
 
 		$criteria->compare('qualification_id',$this->qualification_id);
 		$criteria->compare('qualification_name',$this->qualification_name,true);
-		$criteria->compare('qualification_organization_id',$this->qualification_organization_id);
 		$criteria->compare('qualification_created_by',$this->qualification_created_by);
 		$criteria->compare('qualification_created_date',$this->qualification_created_date,true);
 
 		$data = new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
-		$_SESSION['qua_data'] = $data;
+		unset($_SESSION['exportData']);
+		$_SESSION['exportData'] = $data;
 		return $data;
 	}
-	private static $_items=array();
 
-        public static function items()
-        {
-            if(isset(self::$_items))
-                self::loadItems();
-            return self::$_items;
+	/**
+	*For Export to PDF & Excel
+	*Field written in attributes are exported in excel
+	*For pdf pdfFile will be render to export
+	*/
+	public static function getExportData() {
+	      $data = array('data'=>$_SESSION['exportData'],'attributes'=>array(
+			'qualification_name',
+			'Rel_user.user_organization_email_id:Created By',			
+        		),
+		'filename'=>'Educationboard-List', 'pdfFile'=>'/qualification/gridview_export_report');
+              return $data;
         }
 
-    public static function item($code)
-    {
-        if(!isset(self::$_items))
-            self::loadItems();
-        return isset(self::$_items[$code]) ? self::$_items[$code] : false;
-    }
+	private static $_items=array();
 
-    private static function loadItems()
-    {
-        self::$_items=array();
-        $models=self::model()->findAll();
-        foreach($models as $model)
-            self::$_items[$model->qualification_id]=$model->qualification_name;
-    }
+     	/**
+	* Generate array for dropdown list to use in child form.
+	* @return array $_items
+	*/
+	public static function items()
+	{
+	    self::$_items = CHtml::listData(self::model()->findAll(), 'qualification_id', 'qualification_name');
+	    return self::$_items;
+	}
 }
