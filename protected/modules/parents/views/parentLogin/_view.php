@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 <div class="view">
 
+=======
+<div class="view">
+
+>>>>>>> repo-a/master
 	<b><?php echo CHtml::encode($data->getAttributeLabel('parent_id')); ?>:</b>
 	<?php echo CHtml::link(CHtml::encode($data->parent_id),array('view','id'=>$data->parent_id)); ?>
 	<br />
@@ -20,5 +25,9 @@
 	<?php echo CHtml::encode($data->creation_date); ?>
 	<br />
 
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> repo-a/master
 </div>

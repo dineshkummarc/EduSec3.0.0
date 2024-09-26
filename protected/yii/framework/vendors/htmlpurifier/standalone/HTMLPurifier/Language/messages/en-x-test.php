@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 
 // private language message file for unit testing purposes
@@ -9,3 +10,16 @@ $messages = array(
 );
 
 // vim: et sw=4 sts=4
+=======
+<?php
+
+// private language message file for unit testing purposes
+
+$fallback = 'en';
+
+$messages = array(
+    'HTMLPurifier' => 'HTML Purifier X'
+);
+
+// vim: et sw=4 sts=4
+>>>>>>> repo-a/master

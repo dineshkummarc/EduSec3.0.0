@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 <div class="view">
 
+=======
+<div class="view">
+
+>>>>>>> repo-a/master
 	<b><?php echo CHtml::encode($data->getAttributeLabel('excel_sheet_format_id')); ?>:</b>
 	<?php echo CHtml::link(CHtml::encode($data->excel_sheet_format_id),array('view','id'=>$data->excel_sheet_format_id)); ?>
 	<br />
@@ -24,5 +29,9 @@
 	<?php echo CHtml::encode($data->excel_sheet_format_org_id); ?>
 	<br />
 
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> repo-a/master
 </div>

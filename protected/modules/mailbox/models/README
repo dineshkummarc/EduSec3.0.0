@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 
 
 
 
 Previous version bug fixes
 
+=======
+
+
+
+
+Previous version bug fixes
+
+>>>>>>> repo-a/master
 $this->initiator_del = null;

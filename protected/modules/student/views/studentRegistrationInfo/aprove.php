@@ -1,5 +1,6 @@
 <div class="form">
 <?php
+<<<<<<< HEAD
 $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
 	'id'=>'mydialog',
 	// additional javascript options for the dialog plugin
@@ -14,6 +15,22 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
 		'close' => 'js:function(event, ui) { location.href = "'.Yii::app()->createUrl("student/studentRegistrationInfo/admin").'"; }'
 	),
 ));
+=======
+$this->beginWidget('zii.widgets.jui.CJuiDialog', array(
+	'id'=>'mydialog',
+	// additional javascript options for the dialog plugin
+	'options'=>array(
+		'title'=>'Students Preferred Branches',
+		'autoOpen'=>true,
+		'modal'=>true,	
+                'height'=>'auto',
+                'width'=>400,
+                'resizable'=>false,
+                'draggable'=>false,
+		'close' => 'js:function(event, ui) { location.href = "'.Yii::app()->createUrl("student/studentRegistrationInfo/admin").'"; }'
+	),
+));
+>>>>>>> repo-a/master
 ?>
 
 <?php $form=$this->beginWidget('CActiveForm', array(
@@ -42,8 +59,16 @@ $this->beginWidget('zii.widgets.jui.CJuiDialog', array(
 ?>
 
 <?php $this->endWidget(); ?>
+<<<<<<< HEAD
 
 <?php
 $this->endWidget('zii.widgets.jui.CJuiDialog');
 ?>
 </div><!-- form -->
+=======
+
+<?php
+$this->endWidget('zii.widgets.jui.CJuiDialog');
+?>
+</div><!-- form -->
+>>>>>>> repo-a/master

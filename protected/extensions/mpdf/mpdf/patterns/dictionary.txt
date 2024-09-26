@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 dis/es/tab/lish/men/tar/i/an/ism
+=======
+dis/es/tab/lish/men/tar/i/an/ism
+>>>>>>> repo-a/master
