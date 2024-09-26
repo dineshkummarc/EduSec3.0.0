@@ -1,0 +1,36 @@
+2014/10/02 15:17:49 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: SELECT * FROM `employee_transaction` `t` WHERE employee_transaction_user_id=.
+in /var/www/EduSec2.1.2/protected/modules/employee/models/EmployeeDocsTrans.php (93)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeDocsTrans/employeedocs.php (9)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeTransaction/profile_form.php (385)
+2014/10/02 15:18:04 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: SELECT * FROM `employee_transaction` `t` WHERE employee_transaction_user_id=.
+in /var/www/EduSec2.1.2/protected/modules/employee/models/EmployeeDocsTrans.php (93)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeDocsTrans/employeedocs.php (9)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeTransaction/profile_form.php (385)
+2014/10/02 15:18:44 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: SELECT * FROM `employee_transaction` `t` WHERE employee_transaction_user_id=.
+in /var/www/EduSec2.1.2/protected/modules/employee/models/EmployeeDocsTrans.php (93)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeDocsTrans/employeedocs.php (9)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeTransaction/profile_form.php (385)
+2014/10/02 17:47:55 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: SELECT * FROM `employee_transaction` `t` WHERE employee_transaction_user_id=.
+in /var/www/EduSec2.1.2/protected/modules/employee/models/EmployeeDocsTrans.php (93)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeDocsTrans/employeedocs.php (9)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeTransaction/profile_form.php (384)
+2014/10/02 17:49:11 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: SELECT * FROM `employee_transaction` `t` WHERE employee_transaction_user_id=.
+in /var/www/EduSec2.1.2/protected/modules/employee/models/EmployeeDocsTrans.php (93)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeDocsTrans/employeedocs.php (9)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeTransaction/profile_form.php (384)
+2014/10/02 18:01:11 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: SELECT * FROM `employee_transaction` `t` WHERE employee_transaction_user_id=.
+in /var/www/EduSec2.1.2/protected/modules/employee/models/EmployeeDocsTrans.php (93)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeDocsTrans/employeedocs.php (9)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeTransaction/profile_form.php (384)
+2014/10/02 18:05:54 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: SELECT * FROM `employee_transaction` `t` WHERE employee_transaction_user_id=.
+in /var/www/EduSec2.1.2/protected/modules/employee/models/EmployeeDocsTrans.php (93)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeDocsTrans/employeedocs.php (9)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeTransaction/profile_form.php (384)
+2014/10/02 18:06:07 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: SELECT * FROM `employee_transaction` `t` WHERE employee_transaction_user_id=.
+in /var/www/EduSec2.1.2/protected/modules/employee/models/EmployeeDocsTrans.php (93)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeDocsTrans/employeedocs.php (9)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeTransaction/profile_form.php (384)
+2014/10/02 18:10:18 [error] [system.db.CDbCommand] CDbCommand::fetchAll() failed: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1. The SQL statement executed was: SELECT * FROM `employee_transaction` `t` WHERE employee_transaction_user_id=.
+in /var/www/EduSec2.1.2/protected/modules/employee/models/EmployeeDocsTrans.php (93)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeDocsTrans/employeedocs.php (9)
+in /var/www/EduSec2.1.2/protected/modules/employee/views/employeeTransaction/profile_form.php (384)
